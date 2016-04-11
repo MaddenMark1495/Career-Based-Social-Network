@@ -1,5 +1,27 @@
 <?php
 	session_start();
+	require './secure/db.conf';
+
+	if(isset($_POST['submit'])) { // Was the form submitted?
+
+		$hash = password_hash("pass", PASSWORD_DEFAULT);
+		$link = mysqli_connect($dbhost,$dbuser,$dbpass,$dbname) or die ("Connection Error " . mysqli_error($link));
+
+		$sql = 'SELECT `user_id`, `hashed_password` FROM `linkedout`.`users` WHERE username = "';
+		$query = $sql . $_POST['username'] . '";';
+		$result = mysqli_query($link, $query);
+		$row = mysqli_fetch_assoc($result);
+		if (password_verify($_POST['password'], $row['hashed_password'])) {
+			// Set session variables
+			$_SESSION['username'] = $_POST['username'];
+			$_SESSION['user_id'] = $row['user_id'];
+			$_SESSION['islogin'] = '1';
+			//redirect
+			header("Location: home.php");
+		} else {
+			echo 'Username and/or Password are incorrect!';
+		}
+	}
 ?>
 <html>
 	<head>
@@ -45,57 +67,25 @@
     	<div class="container">
 			<div class="row">
 				<div class="col-md-4 col-sm-4 col-xs-3"></div>
-
                 <div id="loginbox">
-				<div class="col-md-4 col-sm-4 col-xs-6">
-					<h2>Login</h2>
-					<form action="<?=$_SERVER['PHP_SELF']?>" method="POST">
-						<div class="row form-group">
+					<div class="col-md-4 col-sm-4 col-xs-6">
+						<h2>Login</h2>
+						<form action="<?=$_SERVER['PHP_SELF']?>" method="POST">
+							<div class="row form-group">
 								<input class='form-control' type="text" name="username" placeholder="username">
-						</div>
-						<div class="row form-group">
+							</div>
+							<div class="row form-group">
 								<input class='form-control' type="password" name="password" placeholder="password">
-						</div>
-						<div class="row form-group">
+							</div>
+							<div class="row form-group">
 								<input class="w3-btn w3-hover-green" type="submit" name="submit" value="Login"/>
-                                <a href="register2.php" class="w3-btn w3-hover-blue">Register</a>
-                                <!--<input class=" btn btn-info" type="submit" name="logout" value="Logout"/>-->
-						</div>
-					</form>
+	                            <a href="register2.php" class="w3-btn w3-hover-blue">Register</a>
+	                            <!--<input class=" btn btn-info" type="submit" name="logout" value="Logout"/>-->
+							</div>
+						</form>
+					</div>
 				</div>
-			</div>
-        </div>
-
-			<?php
-				if(isset($_POST['submit'])) { // Was the form submitted?
-					include "./secure/db.conf";
-                    //must add connection to db
-					$link = mysqli_connect($dbhost,$dbuser,$dbpass,$dbname) or die ("Connection Error " . mysqli_error($link));
-					//password hashed
-
-					$sql = 'SELECT user_id, hashed_password FROM users WHERE username = "';
-					$query=$sql . $_POST['username'].'";';
-					$result = mysqli_query($link, $query);
-						$row = mysqli_fetch_assoc($result);
-						if (password_verify($_POST['password'], $row['hashed_password']))
-						{
-							echo 'You logged in!';
-							// Set session variables
-							$_SESSION['username'] = $_POST['username'];
-							$_SESSION['user_id'] = $row['user_id'];
-							$_SESSION['islogin'] = '1';
-
-							header("Location: home.php");
-						}
-						else
-						{
-							echo 'Username and/or Password are incorrect!';
-						}
-				}
-			?>
+        	</div>
 		</div>
-    </td>
-  </tr>
-</table>
-</body>
+	</body>
 </html>

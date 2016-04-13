@@ -1,6 +1,6 @@
 <?php
 	session_start();
-	require './secure/db.conf';
+	require '../secure/db.conf';
 
 	if(isset($_POST['submit'])) { // Was the form submitted?
 

@@ -1,10 +1,14 @@
 <?php
 	session_start();
-	require './secure/db.conf';
+
+	if($_SESSION['islogin']) {
+		header("Location: home.php");
+	}
+	$error = '';
+	require '../secure/db.conf';
 
 	if(isset($_POST['submit'])) { // Was the form submitted?
 
-		$hash = password_hash("pass", PASSWORD_DEFAULT);
 		$link = mysqli_connect($dbhost,$dbuser,$dbpass,$dbname) or die ("Connection Error " . mysqli_error($link));
 
 		$sql = 'SELECT `user_id`, `hashed_password` FROM `linkedout`.`users` WHERE username = "';
@@ -15,11 +19,12 @@
 			// Set session variables
 			$_SESSION['username'] = $_POST['username'];
 			$_SESSION['user_id'] = $row['user_id'];
+			$_SESSION['view_id'] = $_SESSION['user_id'];
 			$_SESSION['islogin'] = '1';
 			//redirect
 			header("Location: home.php");
 		} else {
-			echo 'Username and/or Password are incorrect!';
+			$error = 'Username and/or Password are incorrect!';
 		}
 	}
 ?>
@@ -79,7 +84,7 @@
 							</div>
 							<div class="row form-group">
 								<input class="w3-btn w3-hover-green" type="submit" name="submit" value="Login"/>
-	                            <a href="register2.php" class="w3-btn w3-hover-blue">Register</a>
+	                            <a href="register.php" class="w3-btn w3-hover-blue">Register</a>
 	                            <!--<input class=" btn btn-info" type="submit" name="logout" value="Logout"/>-->
 							</div>
 						</form>
@@ -87,5 +92,8 @@
 				</div>
         	</div>
 		</div>
+		<?php
+				echo "<h4>".$error."<h4>";
+		 ?>
 	</body>
 </html>

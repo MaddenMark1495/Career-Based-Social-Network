@@ -1,4 +1,21 @@
 <?php
+	session_start();
+
+	/*
+	//redirect if not logged in
+	if(!$_SESSION['islogin']) {
+		header("Location: index.php");
+	}
+	*/
+
+	//hardcoded for testing
+	$_SESSION['username'] = 'user';
+	$_SESSION['user_id'] = 1;
+	$_SESSION['view_id'] = 1;
+	$_SESSION['islogin'] = 1;
+
+	$view_id = $_SESSION['view_id'];
+
 	require '../secure/db.conf';
     // Create connection
 	$conn = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
@@ -87,7 +104,8 @@
       </form>
 
                       <ul class="nav navbar-nav navbar-right">
-                          <li><a href="#">Settings</a></li>
+                          <li><a href="logout.php">Logout</a></li>
+						  <li><a href=""><?php echo $_SESSION['username']; ?><li>
                       </ul>
                     </div><!-- /.navbar-collapse -->
                   </div><!-- /.container-fluid -->
@@ -143,7 +161,7 @@
 
             <h4 id="fullname">Full Name:
 <?PHP
-                        $sql = "SELECT fname, lname from users where username='user'";
+                        $sql = "SELECT fname, lname from users where user_id=$view_id";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -163,7 +181,7 @@ if ($result->num_rows > 0) {
             <h4 id = "occupation">Occupation:</h4>
             <h4 id = "address">City, State:
 <?PHP
-$sql = "SELECT users.city,states.state from users inner join states on users.state=states.idstates where username='user'";
+$sql = "SELECT users.city,states.state from users inner join states on users.state=states.idstates where user_id=$view_id";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -181,7 +199,7 @@ if ($result->num_rows > 0) {
 ?></h4>
             <h4 id="School">School:
 <?PHP
-$sql = "SELECT education.school from education inner join users on education.user_id=users.user_id where users.username='user'";
+$sql = "SELECT education.school from education inner join users on education.user_id=users.user_id where users.user_id=$view_id";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -231,7 +249,7 @@ if ($result->num_rows > 0) {
           <h4>Experience</h4>
             <h5 id="job_title">Job title:
 <?PHP
-                $sql = "select work_experience.title from work_experience inner join users on work_experience.user_id=users.user_id where users.user_id=1";
+                $sql = "SELECT work_experience.title from work_experience where work_experience.user_id=$view_id";
                 $result = $conn->query($sql);
 
                 if ($result->num_rows > 0) {
@@ -248,7 +266,7 @@ if ($result->num_rows > 0) {
                 </h5>
             <h5 id="job_date">Date:
 <?PHP
-                $sql = "select work_experience.start_date,work_experience.end_date from work_experience inner join users on work_experience.user_id=users.user_id where users.user_id=1";
+                $sql = "SELECT work_experience.start_date,work_experience.end_date from work_experience where work_experience.user_id=$view_id";
                 $result = $conn->query($sql);
 
                 if ($result->num_rows > 0) {
@@ -267,7 +285,7 @@ if ($result->num_rows > 0) {
                 </h5>
             <p id="job_desciption">"
 <?PHP
-                $sql = "select work_experience.description from work_experience inner join users on work_experience.user_id=users.user_id where users.user_id=1";
+                $sql = "SELECT work_experience.description from work_experience where work_experience.user_id=$view_id";
                 $result = $conn->query($sql);
 
                 if ($result->num_rows > 0) {
@@ -286,7 +304,7 @@ if ($result->num_rows > 0) {
             <h4>Education</h4>
             <ul id="reccomend_list">
             <li>School:   <?PHP
-                $sql = "select education.school from education inner join users on education.user_id=users.user_id where users.user_id=1";
+                $sql = "SELECT education.school from education where education.user_id=$view_id";
                 $result = $conn->query($sql);
 
                 if ($result->num_rows > 0) {
@@ -301,7 +319,7 @@ if ($result->num_rows > 0) {
 
 ?> Date
 <?PHP
-                $sql = "select education.start_year,education.end_year from education inner join users on education.user_id=users.user_id where users.user_id=1";
+                $sql = "SELECT education.start_year,education.end_year from education where education.user_id=$view_id";
                 $result = $conn->query($sql);
 
                 if ($result->num_rows > 0) {
@@ -323,15 +341,19 @@ if ($result->num_rows > 0) {
             <ul id="skils_list">
             <li>Skill:
 <?PHP
-                $sql = "select skills.skill from user_skills inner join users on users.user_id=user_skills.user_id inner join skills on user_skills.skills_id=skills.skills_id where users.user_id=1";
+                $sql = "SELECT skills.skill from user_skills inner join users on users.user_id=user_skills.user_id inner join skills on user_skills.skills_id=skills.skills_id where users.user_id=$view_id";
                 $result = $conn->query($sql);
 
                 if ($result->num_rows > 0) {
                     // output data of each row
+					$rownum = 0;
                     while($row = $result->fetch_assoc()) {
                         //print_r($row);
                         echo $row['skill'];
-                        echo ",";
+						$rownum++;
+						if($rownum < $result->num_rows) {
+							echo ", ";
+						}
                     }
                 } else {
                     echo "0 results";
@@ -351,7 +373,7 @@ if ($result->num_rows > 0) {
             <h4>Followed Groups</h4>
             <ul id="followed_list">
 <?PHP
-                $sql = "select DISTINCT organizations.org_name from users_orgs inner join users on users.user_id=users_orgs.user_id inner join organizations on organizations.org_id=users_orgs.org_id where users.user_id=1";
+                $sql = "SELECT DISTINCT organizations.org_name from users_orgs inner join users on users.user_id=users_orgs.user_id inner join organizations on organizations.org_id=users_orgs.org_id where users.user_id=$view_id";
                 $result = $conn->query($sql);
 
                 if ($result->num_rows > 0) {

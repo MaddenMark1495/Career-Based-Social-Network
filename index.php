@@ -2,7 +2,7 @@
 	session_start();
 
 	if($_SESSION['islogin']) {
-		header("Location: profile.php");
+		header("Location: ViewProfile.php");
 	}
 	$error = '';
 	require '../secure/db.conf';
@@ -20,9 +20,9 @@
 			$_SESSION['username'] = $_POST['username'];
 			$_SESSION['user_id'] = $row['user_id'];
 			$_SESSION['view_id'] = $_SESSION['user_id'];
-			$_SESSION['islogin'] = '1';
+			$_SESSION['islogin'] = 1;
 			//redirect
-			header("Location: profile.php");
+			header("Location: ViewProfile.php");
 		} else {
 			$error = 'Username and/or Password are incorrect!';
 		}

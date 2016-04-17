@@ -179,7 +179,7 @@ if ($result->num_rows > 0) {
 ?></h4>
 
             <h4 id = "occupation">Occupation:</h4>
-            <h4 id = "address">City, State:
+            <h4 id = "address">
 <?PHP
 $sql = "SELECT users.city,states.state from users inner join states on users.state=states.idstates where user_id=$view_id";
 $result = $conn->query($sql);
@@ -189,7 +189,7 @@ if ($result->num_rows > 0) {
      while($row = $result->fetch_assoc()) {
          //print_r($row);
          echo $row['city'];
-         echo ",";
+         echo ", ";
          echo $row['state'];
      }
 } else {
@@ -274,7 +274,7 @@ if ($result->num_rows > 0) {
                     while($row = $result->fetch_assoc()) {
                         //print_r($row);
                         echo $row['start_date'];
-                        echo "-";
+                        echo " - ";
                         echo $row['end_date'];
                     }
                 } else {
@@ -283,7 +283,7 @@ if ($result->num_rows > 0) {
 
 ?>
                 </h5>
-            <p id="job_desciption">"
+            <p id="job_desciption">
 <?PHP
                 $sql = "SELECT work_experience.description from work_experience where work_experience.user_id=$view_id";
                 $result = $conn->query($sql);
@@ -302,7 +302,7 @@ if ($result->num_rows > 0) {
               <br>
             <hr>
             <h4>Education</h4>
-            <ul id="reccomend_list">
+            <ul id="education_list">
             <li>School:   <?PHP
                 $sql = "SELECT education.school from education where education.user_id=$view_id";
                 $result = $conn->query($sql);
@@ -336,9 +336,10 @@ if ($result->num_rows > 0) {
 
 ?>
                 </li>
-
-              <h4>Skills</h4>
-            <ul id="skils_list">
+			</ul>
+			<hr>
+            <h4>Skills</h4>
+            <ul id="skills_list">
             <li>Skill:
 <?PHP
                 $sql = "SELECT skills.skill from user_skills inner join users on users.user_id=user_skills.user_id inner join skills on user_skills.skills_id=skills.skills_id where users.user_id=$view_id";
@@ -363,11 +364,11 @@ if ($result->num_rows > 0) {
                 </li>
             </ul>
             <hr>
-             <h4>Reccomendations</h4>
-            <ul id="reccomend_list">
-            <li>Reccomneded by this person</li>
-            <li>Reccomended by this person</li>
-            <li>Reccomended by this person</li>
+             <h4>Recommendations</h4>
+            <ul id="recommend_list">
+            <li>Recommended by this person</li>
+            <li>Recommended by this person</li>
+            <li>Recommended by this person</li>
             </ul>
             <hr>
             <h4>Followed Groups</h4>
@@ -380,15 +381,13 @@ if ($result->num_rows > 0) {
                     // output data of each row
                     while($row = $result->fetch_assoc()) {
                         //print_r($row);
-                        echo"<li>";
-                        echo $row['org_name'];
-                        echo"</li>";
+                        echo "<li>".$row['org_name']."</li>";
                     }
                 } else {
                     echo "0 results";
                 }
 
-    ?></li>
+    ?>
             </ul>
 
             </div>

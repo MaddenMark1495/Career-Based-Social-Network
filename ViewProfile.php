@@ -6,10 +6,6 @@
 	if(!$_SESSION['islogin']) {
 		header("Location: index.php");
 	}
-
-	if(isset($_POST['home'])) {
-		$_SESSION['view_id'] = $_SESSION['user_id'];
-	}
 */
 	//$_SESSION['view_id'] = $_GET['user_id'];
 
@@ -133,8 +129,8 @@
 
             <div class="col-sm-4" id ="button_toolbar">
             <ul class="nav nav-pills">
-              <li role="presentation" class="active"><a href="#">Edit Profile</a></li>
-              <li role="presentation"><a href="#">Profile</a></li>
+              <li role="presentation"><a href="#">Edit Profile</a></li>
+              <li role="presentation" class="active"><a href="#">Profile</a></li>
               <li role="presentation"><a href="#">Connections</a></li>
             <li role="presentation"><a href="#">Groups</a></li>
             </ul>

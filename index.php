@@ -2,7 +2,8 @@
 	session_start();
 
 	if($_SESSION['islogin']) {
-		header("Location: ViewProfile.php");
+		$uid = $_SESSION['user_id'];
+		header("Location: ViewProfile.php?user_id=$uid");
 	}
 	$error = '';
 	require '../secure/db.conf';

@@ -129,7 +129,12 @@
 
             <div class="col-sm-4" id ="button_toolbar">
             <ul class="nav nav-pills">
-              <li role="presentation"><a href="#">Edit Profile</a></li>
+			<?php
+				if($_SESSION['user_id'] == $_GET['user_id']) {
+					echo "<li role='presentation'><a href='editprofile.php?user_id=$view_id'>Edit Profile</a></li>";
+				}
+			 ?>
+              <!-- <li role="presentation"><a href="">Edit Profile</a></li> -->
               <li role="presentation" class="active"><a href="#">Profile</a></li>
               <li role="presentation"><a href="#">Connections</a></li>
             <li role="presentation"><a href="#">Groups</a></li>
@@ -386,7 +391,7 @@ if ($result->num_rows > 0) {
                 } else {
                     echo "0 results";
                 }
-				
+
 				$conn->close();
     ?>
             </ul>

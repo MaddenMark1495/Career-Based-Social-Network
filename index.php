@@ -21,8 +21,10 @@
 			$_SESSION['user_id'] = $row['user_id'];
 			$_SESSION['view_id'] = $_SESSION['user_id'];
 			$_SESSION['islogin'] = 1;
+
+			$uid = $_SESSION['user_id'];
 			//redirect
-			header("Location: ViewProfile.php");
+			header("Location: ViewProfile.php?user_id=$uid");
 		} else {
 			$error = 'Username and/or Password are incorrect!';
 		}

@@ -1,18 +1,22 @@
 <?php
 	session_start();
 
-	/*
+/*
 	//redirect if not logged in
 	if(!$_SESSION['islogin']) {
 		header("Location: index.php");
 	}
-	*/
+
+	if(isset($_POST['home'])) {
+		$_SESSION['view_id'] = $_SESSION['user_id'];
+	}
+*/
+	//$_SESSION['view_id'] = $_GET['user_id'];
 
 	//hardcoded for testing
 	$_SESSION['username'] = 'user';
 	$_SESSION['user_id'] = 1;
 	$_SESSION['view_id'] = 1;
-	$_SESSION['islogin'] = 1;
 
 	$view_id = $_SESSION['view_id'];
 
@@ -103,10 +107,10 @@
         <button type="submit" class="btn btn-default">Search</button>
       </form>
 
-                      <ul class="nav navbar-nav navbar-right">
-                          <li><a href="logout.php">Logout</a></li>
-						  <li><a href=""><?php echo $_SESSION['username']; ?><li>
-                      </ul>
+                	<ul class="nav navbar-nav navbar-right">
+						<li><a href="ViewProfile.php?user_id=<?php echo $_SESSION['user_id'];?>"><?php echo $_SESSION['username']; ?><li>
+						<li><a href="logout.php">Logout</a></li>
+					</ul>
                     </div><!-- /.navbar-collapse -->
                   </div><!-- /.container-fluid -->
                 </nav>

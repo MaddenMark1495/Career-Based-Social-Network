@@ -16,6 +16,7 @@
 		$query = $sql . $_POST['username'] . '";';
 		$result = mysqli_query($link, $query);
 		$row = mysqli_fetch_assoc($result);
+		$link->close();
 		if (password_verify($_POST['password'], $row['hashed_password'])) {
 			// Set session variables
 			$_SESSION['username'] = $_POST['username'];

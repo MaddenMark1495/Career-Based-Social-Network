@@ -11,7 +11,7 @@
 
 	//hardcoded for testing
 	$_SESSION['username'] = 'user';
-	$_SESSION['user_id'] = 1;
+	$_SESSION['user_id'] = 11;
 	$_SESSION['view_id'] = 1;
 
 	$view_id = $_SESSION['view_id'];
@@ -22,6 +22,11 @@
 	// Check connection
 	if ($conn->connect_error) {
 	    die("Connection failed: " . $conn->connect_error);
+	}
+
+	if($_SESSION['user_id'] != $view_id) { //$_GET['user_id']) {
+		$sql = "UPDATE users SET profile_views = profile_views+1 WHERE user_id=$view_id";
+		$conn->query($sql);
 	}
 ?>
 <!DOCTYPE html>
@@ -104,6 +109,19 @@
       </form>
 
                 	<ul class="nav navbar-nav navbar-right">
+						<li class="dropdown">
+			              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+				              <ul class="dropdown-menu">
+				                <li><a href="ViewProfile.php?user_id=<?php echo $_SESSION['user_id'];?>">View Profile</a></li>
+				                <li><a href="editprofile.php">Edit Profile</a></li>
+								<li><a href="#">Who are you stalking?</a></li>
+				                <li><a href="logout.php">Logout</a></li>
+				                <li role="separator" class="divider"></li>
+				                <!--<li class="dropdown-header">Nav header</li>-->
+				                <li><a href="Top10.php">Top 10 Users</a></li>
+				                <li><a href="#">One more separated link</a></li>
+				              </ul>
+						</li>
 						<li><a href="ViewProfile.php?user_id=<?php echo $_SESSION['user_id'];?>"><?php echo $_SESSION['username']; ?><li>
 						<li><a href="logout.php">Logout</a></li>
 					</ul>
@@ -138,6 +156,7 @@
               <li role="presentation" class="active"><a href="#">Profile</a></li>
               <li role="presentation"><a href="#">Connections</a></li>
             <li role="presentation"><a href="#">Groups</a></li>
+			<li role="presentation"><a href="Top10.php">Top 10</a></li>
             </ul>
            </div>
            <div class="col-sm-4"></div>

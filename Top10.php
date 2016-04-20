@@ -101,7 +101,7 @@
 						                <li role="separator" class="divider"></li>
 						                <!--<li class="dropdown-header">Nav header</li>-->
 						                <li><a href="Top10.php">Top 10 Users</a></li>
-						                <li><a href="#">One more separated link</a></li>
+						                <!-- <li><a href="#">One more separated link</a></li> -->
 						              </ul>
 								</li>
 							</ul>
@@ -114,40 +114,40 @@
 		<br>
 		<br>
 
-		<div class="header"><h2>Your Profile Views</h2></div>
-		<div class="user"></div>
-		<hr>
 		<div class="header"><h2>Top 10 Users by Profile Views</h2></div>
 		<div class="top10"></div>
 		<hr>
-
 
 		<script>
 
 		 	var url = "http://swegroup14.centralus.cloudapp.azure.com/Career-Based-Social-Network/top10server.php";
 
+			//ajax request to get the top 10 list from DB as JSON
 			$.getJSON(url, function(data) {
 				var top10Bar = d3.select(".top10").selectAll("div").data(data.user),
                     top10Wrapper = top10Bar.enter().append("div").classed("group", true);
 
-                top10Wrapper.append("div")
+				//add the labels with as <a> tags
+				top10Wrapper.append("div")
                     .classed("choice", true)
 					.append("a")
 	                    .text(function(user) {
 	                        return user.fname + " " + user.lname;
 	                    });
 
+				//quick work to get array of just profile_views for chart scaling
 				var pviews = [];
-
 				$.each(data.user, function(index, user) {
 					user.profile_views = +user.profile_views;
 					pviews.push(user.profile_views);
 				});
 
+				//chart scaling
 				var x = d3.scale.linear()
 				    .domain([0, d3.max(pviews)])
 				    .range([0, 500]);
 
+				//add the bars with transition and text and set the width
                 top10Wrapper.append("div")
                     .classed("bar", true)
                     .transition()
@@ -159,18 +159,28 @@
                         return x(user.profile_views) + "px";
                     });
 
+				//need to add id to each bar based on the user it represents
 				var bars = d3.select(".top10").selectAll(".bar").data(data.user);
 				bars.attr("id", function(user) {
 					return "id" + user.user_id;
 				})
 
-				var top10Link = d3.select(".top10").selectAll("a").data(data.user);
+				//for determing if the current user is in the top 10 (thus the ids on the bars)
+				var istop10 = false;
+				var uid = <?php echo $_SESSION['user_id']; ?>;
 
+				//oops.. need to add the hrefs to the <a> tag labels
+				var top10Link = d3.select(".top10").selectAll("a").data(data.user);
 				top10Link.attr("href", function(user) {
-					return "http://sylis.centralus.cloudapp.azure.com/Career-Based-Social-Network/ViewProfile.php?user_id=" + user.user_id;
+					//and set istop10 to true if we find a top10 user that matches the current user
+					if(user.user_id == uid) {
+						istop10 = true;
+					}
+					return "http://swegroup14.centralus.cloudapp.azure.com/Career-Based-Social-Network/ViewProfile.php?user_id=" + user.user_id;
 				});
 
 				<?php
+					//this gets the information corresponding to the current user
 					$link = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
 					$sql = "SELECT user_id, fname, lname, profile_views FROM users WHERE user_id=$uid";
 
@@ -180,33 +190,53 @@
 					$result->free();
 					$link->close();
 
+					//kinda like having it in json
 					print "var usr = [" . json_encode($row) . "];";
 				?>
 
-				var userBar = d3.select(".user").selectAll("div").data(usr),
-					userWrapper = userBar.enter().append("div").classed("group", true);
+				//istop10 = false;
+				//last bit of work dependent on if the the user istop10 or not
+				if(istop10) {
+					//user istop10, color the bar different and add a message
+					var usertop10 = d3.select(".top10").select("#id<?php print $_SESSION['user_id']; ?>");
+					usertop10.style("background-color", "red");
 
-				userWrapper.append("div")
-					.classed("choice", true)
-					.append("a")
+					d3.select("body").append("div")
+						.classed("header", true)
+							.append("h2")
+							.text("Congratulations! You're in the Top 10");
+				} else {
+					//the user !istop10, add a chart of their own profile_views
+					d3.select("body").append("div")
+						.classed("header", true)
+							.append("h2")
+							.text("Your Profile Views");
+
+					d3.select("body").append("div")
+						.classed("user", true);
+
+					var userBar = d3.select(".user").selectAll("div").data(usr),
+						userWrapper = userBar.enter().append("div").classed("group", true);
+
+					userWrapper.append("div")
+						.classed("choice", true)
+						.append("a")
+							.text(function(usr) {
+								return usr.fname + " " + usr.lname;
+							});
+
+					userWrapper.append("div")
+						.classed("bar", true)
+						.transition()
+						.duration(1000)
 						.text(function(usr) {
-							return usr.fname + " " + usr.lname;
+							return usr.profile_views;
+						})
+						.style("width", function(usr) {
+							return x(usr.profile_views) + "px";
 						});
+				}
 
-				userWrapper.append("div")
-					.classed("bar", true)
-					.transition()
-					.duration(1000)
-					.text(function(usr) {
-						return usr.profile_views;
-					})
-					.style("width", function(usr) {
-						return x(usr.profile_views) + "px";
-					});
-
-				var usertop10 = d3.select(".top10").select("#id<?php print $_SESSION['user_id']; ?>");
-
-				usertop10.style("background-color", "red");
 			});
 		</script>
 	</body>

@@ -124,7 +124,7 @@
 
 		<script>
 
-		 	var url = "http://sylis.centralus.cloudapp.azure.com/Career-Based-Social-Network/top10server.php";
+		 	var url = "http://swegroup14.centralus.cloudapp.azure.com/Career-Based-Social-Network/top10server.php";
 
 			$.getJSON(url, function(data) {
 				var top10Bar = d3.select(".top10").selectAll("div").data(data.user),

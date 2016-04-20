@@ -7,14 +7,14 @@
 		header("Location: index.php");
 	}
 */
-	//$_SESSION['view_id'] = $_GET['user_id'];
+	//user get variable to figure determine which profile to load
+	//$view_id = $_GET['user_id'];
 
 	//hardcoded for testing
 	$_SESSION['username'] = 'user';
-	$_SESSION['user_id'] = 11;
-	$_SESSION['view_id'] = 1;
+	$_SESSION['user_id'] = 1;
 
-	$view_id = $_SESSION['view_id'];
+	$view_id = 1;
 
 	require '../secure/db.conf';
     // Create connection
@@ -24,7 +24,7 @@
 	    die("Connection failed: " . $conn->connect_error);
 	}
 
-	if($_SESSION['user_id'] != $view_id) { //$_GET['user_id']) {
+	if($_SESSION['user_id'] != $view_id) {
 		$sql = "UPDATE users SET profile_views = profile_views+1 WHERE user_id=$view_id";
 		$conn->query($sql);
 	}
@@ -181,7 +181,7 @@
 
         <div class="col-sm-4" id="profile_info">
 
-            <h4 id="fullname">Full Name:
+            <h4 id="fullname">
 <?PHP
                         $sql = "SELECT fname, lname from users where user_id=$view_id";
 $result = $conn->query($sql);
@@ -386,7 +386,7 @@ if ($result->num_rows > 0) {
                 </li>
             </ul>
             <hr>
-             <h4>Recommendations</h4>
+            <h4>Recommendations</h4>
             <ul id="recommend_list">
             <li>Recommended by this person</li>
             <li>Recommended by this person</li>

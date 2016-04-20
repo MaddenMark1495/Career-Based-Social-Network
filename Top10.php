@@ -91,8 +91,19 @@
 							</form>
 
 							<ul class="nav navbar-nav navbar-right">
-								<li><a href="ViewProfile.php?user_id=<?php echo $_SESSION['user_id'];?>"><?php echo $_SESSION['username']; ?><li>
-								<li><a href="logout.php">Logout</a></li>
+								<li class="dropdown">
+					              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo $_SESSION['username']; ?> <span class="caret"></span></a>
+						              <ul class="dropdown-menu">
+						                <li><a href="ViewProfile.php?user_id=<?php echo $_SESSION['user_id'];?>">View Profile</a></li>
+						                <li><a href="editprofile.php">Edit Profile</a></li>
+										<li><a href="#">Who are you stalking?</a></li>
+						                <li><a href="logout.php">Logout</a></li>
+						                <li role="separator" class="divider"></li>
+						                <!--<li class="dropdown-header">Nav header</li>-->
+						                <li><a href="Top10.php">Top 10 Users</a></li>
+						                <li><a href="#">One more separated link</a></li>
+						              </ul>
+								</li>
 							</ul>
 						</div><!-- /.navbar-collapse -->
 					</div><!-- /.container-fluid -->

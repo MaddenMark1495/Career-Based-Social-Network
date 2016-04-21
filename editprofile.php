@@ -45,13 +45,13 @@ $dbhost = "us-cdbr-azure-central-a.cloudapp.net";
 	//$link = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
 	if(isset($_POST['submit3'])) { // Was the form submitted?
 
-		
+
 		$link = mysqli_connect($dbhost,$dbuser,$dbpass,$dbname) or die ("Connection Error " . mysqli_error($link));
 
 		$sql = "UPGRADE work_experience SET title =?, start_date =?, end_date =?,description = ? WHERE user_id =? ";
 		//$sql0 = "UPDATE users SET fname =?, lname =?, city =?,state =?  WHERE user_id = ?";
 		if ($stmt = mysqli_prepare($link, $sql)) {
-						
+
 						$title = $_POST['job_title'];
 						$start = $_POST['start_date'];
 						$end = $_POST['end_date'];
@@ -66,21 +66,21 @@ $dbhost = "us-cdbr-azure-central-a.cloudapp.net";
 			$message = " prepare fail";
 		}
 	}
-	
-	
+
+
 	if(isset($_POST['submit4'])) { // Was the form submitted?
 
-		
+
 		$link = mysqli_connect($dbhost,$dbuser,$dbpass,$dbname) or die ("Connection Error " . mysqli_error($link));
 
 		$sql = "UPGRADE education SET school =?, start_year =?, end_year =? WHERE user_id =? ";
-		
+
 		if ($stmt = mysqli_prepare($link, $sql)) {
-						
+
 						$school = $_POST['schoool'];
 						$start = $_POST['start_year'];
 						$end = $_POST['end_year'];
-						
+
 						mysqli_stmt_bind_param($stmt, "ssss", $school,$start, $end, $uid) or die("bind param");
 						if(mysqli_stmt_execute($stmt)) {
 							$message = "<h4>Success</h4>";
@@ -91,16 +91,16 @@ $dbhost = "us-cdbr-azure-central-a.cloudapp.net";
 			$message = " prepare fail";
 		}
 	}
-	
+
 	if(isset($_POST['submit5'])) { // Was the form submitted?
 
-		
+
 		$link = mysqli_connect($dbhost,$dbuser,$dbpass,$dbname) or die ("Connection Error " . mysqli_error($link));
 
 		$sql1 = "UPGRADE skills SET skill =? WHERE user_id =? AND skills_id = ?";
-		
+
 		if ($stmt1 = mysqli_prepare($link, $sql1)) {
-						
+
 						$skill = $_POST['skill1'];
 						$sillid = 1;
 						mysqli_stmt_bind_param($stmt1, "sss", $skill,$uid, $skillid) or die("bind param");
@@ -113,9 +113,9 @@ $dbhost = "us-cdbr-azure-central-a.cloudapp.net";
 			$message = " prepare fail";
 		}
 		$sql2 = "UPGRADE skills SET skill =? WHERE user_id =? AND skills_id = ?";
-		
+
 		if ($stmt = mysqli_prepare($link, $sql2)) {
-						
+
 						$skill = $_POST['skill2'];
 						$sillid = 2;
 						mysqli_stmt_bind_param($stmt2, "sss", $skill,$uid, $skillid) or die("bind param");
@@ -128,9 +128,9 @@ $dbhost = "us-cdbr-azure-central-a.cloudapp.net";
 			$message = " prepare fail";
 		}
 		$sql3 = "UPGRADE skills SET skill =? WHERE user_id =? AND skills_id = ?";
-		
+
 		if ($stmt3 = mysqli_prepare($link, $sql3)) {
-						
+
 						$skill = $_POST['skill3'];
 						$sillid = 3;
 						mysqli_stmt_bind_param($stmt3, "sss", $skill,$uid, $skillid) or die("bind param");
@@ -142,7 +142,7 @@ $dbhost = "us-cdbr-azure-central-a.cloudapp.net";
 		}else{
 			$message = " prepare fail";
 		}
-		
+
 	}
 	$link = new mysqli($dbhost,$dbuser,$dbpass,$dbname);
  ?>
@@ -281,7 +281,7 @@ $dbhost = "us-cdbr-azure-central-a.cloudapp.net";
 				$result = $link->query($sql);
 				$user_row = $result->fetch_assoc();
 			 ?>
-			<form action="<?=$_SERVER['PHP_SELF']?>" method="POST">
+			<form id="user" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
             <h4 id="fullname">Full Name
             <input class = 'form-control' type ="text" name = " firstname" placeholder="First Name" value="<?php echo $user_row['fname']; ?>">
           <input class = 'form-control' type ="text" name = " lastname" placeholder="Last Name" value="<?php echo $user_row['lname']; ?>">
@@ -292,14 +292,21 @@ $dbhost = "us-cdbr-azure-central-a.cloudapp.net";
             </h4>
           <h4 id = "address">City, State
           <input class = 'form-control' type ="text" name = "city" placeholder="City" value="<?php echo $user_row['city']; ?>">
-		  <?php
-		  		$sid = $user_row['state'];
-				$sqlmm = "SELECT state from states where idstates = $sid";
-				$sres = $link->query($sqlmm);
-				$srow = $sres->fetch_assoc();
-		   ?>
-          <input class = 'form-control' type ="text" name = "state" placeholder="state" value="<?php echo $srow['state'];; ?>">
-          </h4>
+		  <select form="user" name="state">
+<?php
+	$sql = "SELECT * FROM states";
+	$result = $link->query($sql);
+	while($row = $result->fetch_assoc()) {
+		if($row['idstates'] == $user_row['state']) {
+			echo "<option value='" . $row['idstates'] . "' selected>" . $row['state'] . "</option>";
+		} else {
+			echo "<option value='" . $row['idstates'] . "'>" . $row['state'] . "</option>";
+		}
+	}
+	$result->free();
+?>
+		  </select>
+		  </h4>
 				<?php
 				$id =1;
 				$sql = "SELECT * FROM education where user_id=$id";
@@ -354,31 +361,31 @@ $dbhost = "us-cdbr-azure-central-a.cloudapp.net";
             <p> <input class=" w3-btn w3-hover-blue" type="submit" name="submit2" value="Save"></p>
            <hr>
          <h4>Experience</h4>
-        
-            <h5 id="job_title">Job Title <br> 
+
+            <h5 id="job_title">Job Title <br>
             <input name = "job_title"  type ="text" placeholder="Job Title" value="<?php echo $wrow['title']; ?>"></h5>
-            
-            
+
+
             <h5 id="job_date">Date - Date <br>
             <input name = "start_date"  type ="text"  placeholder="Start date" value="<?php echo $wrow['start_date']; ?>">-<input name = "end_date"  type ="text" placeholder="End date" value="<?php echo $wrow['end_date']; ?>"></h5>
-            
+
             <p id="job_description"><input id = "job_description" type ="text" placeholder="Description" value="<?php echo $wrow['description']; ?>"></p>
-            <p> <input class=" w3-btn w3-hover-blue" type="submit" name="submit3" value="Save"></p>      
-     
-              <br>  
-                
+            <p> <input class=" w3-btn w3-hover-blue" type="submit" name="submit3" value="Save"></p>
+
+              <br>
+
             <hr>
             <h4>Education</h4>
-            
+
             <ul id="reccomend_list">
             <li>School   -   Date</li>
             <input name = "school"  type ="text"  placeholder="school"value="<?php echo $erow['school']; ?>"> <input name = "start_year"  type ="text"  placeholder="Start year" value="<?php echo $erow['start_year']; ?>">-<input name = "end_year"  type ="text"  placeholder="End year" value="<?php echo $erow['end_year']; ?>">
-            
+
             </p>
              <input class=" w3-btn w3-hover-blue" type="submit" name="submit4" value="Save">
-            </ul> 
-                     
-     
+            </ul>
+
+
                 <hr>
               <h4>Skills</h4>
             <ul id="skils_list">
@@ -389,7 +396,7 @@ $dbhost = "us-cdbr-azure-central-a.cloudapp.net";
             <li>Skill</li>
              <p>
               <textarea id = "skill3" placeholder="Skill" value="<?php echo $srow['skill3']; ?>"></textarea>
-               
+
 
              </p>
              <p> <input class=" w3-btn w3-hover-blue" type="submit" name="submit5" value="Save"></p>

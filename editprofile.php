@@ -1,6 +1,6 @@
 <?php
 	session_start();
-	require '../secure/db.conf';
+	//require '../secure/db.conf';
 /*
 	if(!$_SESSION['islogin']) {
 		header("Location: index.php");
@@ -11,7 +11,11 @@
 	}
 
 */
-	$_SESSION['user_id'] = 1;
+$dbhost = "us-cdbr-azure-central-a.cloudapp.net";
+	$dbuser = "bc5440dcdc748f";
+	$dbpass = "d3dc6711";
+	$dbname = "linkedout";
+	$_SESSION['user_id'] = 21;
 	//$uid = $_GET['user_id'];
 	$uid = $_SESSION['user_id'];
 
@@ -21,14 +25,14 @@
 
 		$link = mysqli_connect($dbhost,$dbuser,$dbpass,$dbname) or die ("Connection Error " . mysqli_error($link));
 
-		$sql = "UPDATE users SET fname=?, lname=?, city=? WHERE user_id=?";
+		$sql = "UPDATE users SET fname=?, lname=?, city=?, state =? WHERE user_id=?";
 
 		if ($stmt = mysqli_prepare($link, $sql)) {
 			$fname = $_POST['firstname'];
 			$lname = $_POST['lastname'];
 			$city = $_POST['city'];
 			$state = $_POST['state'];
-			mysqli_stmt_bind_param($stmt, "ssss", $fname, $lname, $city, $uid) or die("bind param");
+			mysqli_stmt_bind_param($stmt, "sssss", $fname, $lname, $city, $state,$uid) or die("bind param");
 			if(mysqli_stmt_execute($stmt)) {
 				$message = "<h4>Success</h4>";
 			} else {
@@ -38,8 +42,109 @@
 			$message = "prepare fail";
 		}
 	}
-	$link = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+	//$link = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+	if(isset($_POST['submit3'])) { // Was the form submitted?
 
+		
+		$link = mysqli_connect($dbhost,$dbuser,$dbpass,$dbname) or die ("Connection Error " . mysqli_error($link));
+
+		$sql = "UPGRADE work_experience SET title =?, start_date =?, end_date =?,description = ? WHERE user_id =? ";
+		//$sql0 = "UPDATE users SET fname =?, lname =?, city =?,state =?  WHERE user_id = ?";
+		if ($stmt = mysqli_prepare($link, $sql)) {
+						
+						$title = $_POST['job_title'];
+						$start = $_POST['start_date'];
+						$end = $_POST['end_date'];
+						$description = $_POST['job_description'];
+						mysqli_stmt_bind_param($stmt, "sssss", $title, $start, $end, $description,$uid) or die("bind param");
+						if(mysqli_stmt_execute($stmt)) {
+							$message ="<h4>Success</h4>";
+						} else {
+							$message ="<h4>Failed</h4>";
+						}
+		}else{
+			$message = " prepare fail";
+		}
+	}
+	
+	
+	if(isset($_POST['submit4'])) { // Was the form submitted?
+
+		
+		$link = mysqli_connect($dbhost,$dbuser,$dbpass,$dbname) or die ("Connection Error " . mysqli_error($link));
+
+		$sql = "UPGRADE education SET school =?, start_year =?, end_year =? WHERE user_id =? ";
+		
+		if ($stmt = mysqli_prepare($link, $sql)) {
+						
+						$school = $_POST['schoool'];
+						$start = $_POST['start_year'];
+						$end = $_POST['end_year'];
+						
+						mysqli_stmt_bind_param($stmt, "ssss", $school,$start, $end, $uid) or die("bind param");
+						if(mysqli_stmt_execute($stmt)) {
+							$message = "<h4>Success</h4>";
+						} else {
+							$message ="<h4>Failed</h4>";
+						}
+		}else{
+			$message = " prepare fail";
+		}
+	}
+	
+	if(isset($_POST['submit5'])) { // Was the form submitted?
+
+		
+		$link = mysqli_connect($dbhost,$dbuser,$dbpass,$dbname) or die ("Connection Error " . mysqli_error($link));
+
+		$sql1 = "UPGRADE skills SET skill =? WHERE user_id =? AND skills_id = ?";
+		
+		if ($stmt1 = mysqli_prepare($link, $sql1)) {
+						
+						$skill = $_POST['skill1'];
+						$sillid = 1;
+						mysqli_stmt_bind_param($stmt1, "sss", $skill,$uid, $skillid) or die("bind param");
+						if(mysqli_stmt_execute($stmt1)) {
+							$message = "<h4>Success</h4>";
+						} else {
+							$message = "<h4>Failed</h4>";
+						}
+		}else{
+			$message = " prepare fail";
+		}
+		$sql2 = "UPGRADE skills SET skill =? WHERE user_id =? AND skills_id = ?";
+		
+		if ($stmt = mysqli_prepare($link, $sql2)) {
+						
+						$skill = $_POST['skill2'];
+						$sillid = 2;
+						mysqli_stmt_bind_param($stmt2, "sss", $skill,$uid, $skillid) or die("bind param");
+						if(mysqli_stmt_execute($stmt2)) {
+							$message ="<h4>Success</h4>";
+						} else {
+							$message ="<h4>Failed</h4>";
+						}
+		}else{
+			$message = " prepare fail";
+		}
+		$sql3 = "UPGRADE skills SET skill =? WHERE user_id =? AND skills_id = ?";
+		
+		if ($stmt3 = mysqli_prepare($link, $sql3)) {
+						
+						$skill = $_POST['skill3'];
+						$sillid = 3;
+						mysqli_stmt_bind_param($stmt3, "sss", $skill,$uid, $skillid) or die("bind param");
+						if(mysqli_stmt_execute($stmt3)) {
+							$message = "<h4>Success</h4>";
+						} else {
+							$message ="<h4>Failed</h4>";
+						}
+		}else{
+			$message = " prepare fail";
+		}
+		
+	}
+	$link = new mysqli($dbhost,$dbuser,$dbpass,$dbname);
  ?>
 <!DOCTYPE html>
 <html>
@@ -120,21 +225,9 @@
         <button type="submit" class="btn btn-default">Search</button>
       </form>
 
-						<ul class="nav navbar-nav navbar-right">
-							<li class="dropdown">
-							  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo $_SESSION['username']; ?> <span class="caret"></span></a>
-								  <ul class="dropdown-menu">
-									<li><a href="ViewProfile.php?user_id=<?php echo $_SESSION['user_id'];?>">View Profile</a></li>
-									<li><a href="editprofile.php">Edit Profile</a></li>
-									<li><a href="#">Who are you stalking?</a></li>
-									<li><a href="logout.php">Logout</a></li>
-									<li role="separator" class="divider"></li>
-									<!--<li class="dropdown-header">Nav header</li>-->
-									<li><a href="Top10.php">Top 10 Users</a></li>
-									<li><a href="#">One more separated link</a></li>
-								  </ul>
-							</li>
-						</ul>
+                      <ul class="nav navbar-nav navbar-right">
+                          <li><a href="logout.php">Logout</a></li>
+                      </ul>
                     </div><!-- /.navbar-collapse -->
                   </div><!-- /.container-fluid -->
                 </nav>
@@ -201,15 +294,21 @@
           <input class = 'form-control' type ="text" name = "city" placeholder="City" value="<?php echo $user_row['city']; ?>">
 		  <?php
 		  		$sid = $user_row['state'];
-				$sql = "SELECT state from states where idstates = $sid";
-				$sres = $link->query($sql);
+				$sqlmm = "SELECT state from states where idstates = $sid";
+				$sres = $link->query($sqlmm);
 				$srow = $sres->fetch_assoc();
 		   ?>
-          <input class = 'form-control' type ="text" name = "state" placeholder="state" value="<?php echo $srow['state']; ?>">
+          <input class = 'form-control' type ="text" name = "state" placeholder="state" value="<?php echo $srow['state'];; ?>">
           </h4>
+				<?php
+				$id =1;
+				$sql = "SELECT * FROM education where user_id=$id";
 
+				$es = $link->query($sql);
+				$erow = $es->fetch_assoc();
+			 ?>
           <h4 id="School">School
-             <input class = 'form-control' type ="text" name = "school" placeholder="School">
+             <input class = 'form-control' type ="text" name = "school" placeholder="School" value="<?php echo $erow['school']; ?>">
              </h4>
             Status:<p id="status">
               <textarea id = "status" placeholder="Status"></textarea>
@@ -241,47 +340,56 @@
         <div class="col-sm-8">
 
 
-
+			<form action="<?=$_SERVER['PHP_SELF']?>" method="POST">
             <div id = "background">
+             <?php
+				$sql = "SELECT * FROM work_experience where user_id=$uid";
+
+				$ws = $link->query($sql);
+				$wrow = $ws->fetch_assoc();
+			 ?>
             <h2>Background</h2>
             <h4>Summary</h4>
             <p id="summary"><textarea id = "summary" placeholder="Summary"></textarea></p>
             <p> <input class=" w3-btn w3-hover-blue" type="submit" name="submit2" value="Save"></p>
            <hr>
-          <h4>Experience</h4>
-            <h5 id="job_title">Job Title <br>
-            <input name = "job_title"  type ="text" placeholder="Job Title"></h5>
-
-
+         <h4>Experience</h4>
+        
+            <h5 id="job_title">Job Title <br> 
+            <input name = "job_title"  type ="text" placeholder="Job Title" value="<?php echo $wrow['title']; ?>"></h5>
+            
+            
             <h5 id="job_date">Date - Date <br>
-            <input name = "start_date"  type ="text"  placeholder="Start date">-<input name = "end_date"  type ="text" placeholder="End date"></h5>
-
-            <p id="job_desciption"><textarea id = "job_desciption" placeholder="Desciption"></textarea></p>
-            <p> <input class=" w3-btn w3-hover-blue" type="submit" name="submit3" value="Save"></p>
-              <br>
-
+            <input name = "start_date"  type ="text"  placeholder="Start date" value="<?php echo $wrow['start_date']; ?>">-<input name = "end_date"  type ="text" placeholder="End date" value="<?php echo $wrow['end_date']; ?>"></h5>
+            
+            <p id="job_description"><input id = "job_description" type ="text" placeholder="Description" value="<?php echo $wrow['description']; ?>"></p>
+            <p> <input class=" w3-btn w3-hover-blue" type="submit" name="submit3" value="Save"></p>      
+     
+              <br>  
+                
             <hr>
             <h4>Education</h4>
+            
             <ul id="reccomend_list">
             <li>School   -   Date</li>
-            <input name = "School"  type ="text"  placeholder="School"> <input name = "start_year"  type ="text"  placeholder="Start year">-<input name = "end_year"  type ="text"  placeholder="End year">
-            <li>School   -   Date</li>
-            <p>
-              <input name = "School"  type ="text"  placeholder="School">
-              <input name = "start_year"  type ="text"  placeholder="Start year">-<input name = "end_year"  type ="text"  placeholder="End year">
+            <input name = "school"  type ="text"  placeholder="school"value="<?php echo $erow['school']; ?>"> <input name = "start_year"  type ="text"  placeholder="Start year" value="<?php echo $erow['start_year']; ?>">-<input name = "end_year"  type ="text"  placeholder="End year" value="<?php echo $erow['end_year']; ?>">
+            
             </p>
              <input class=" w3-btn w3-hover-blue" type="submit" name="submit4" value="Save">
-            </ul>
+            </ul> 
+                     
+     
                 <hr>
               <h4>Skills</h4>
             <ul id="skils_list">
             <li>Skill</li>
-            <textarea id = "skill1" placeholder="Skill"></textarea>
+            <textarea id = "skill1" placeholder="Skill" value="<?php echo $srow['skill1']; ?>"></textarea>
             <li>Skill</li>
-             <textarea id = "skill2" placeholder="Skill"></textarea>
+             <textarea id = "skill2" placeholder="Skill" value="<?php echo $srow['skill2']; ?>"></textarea>
             <li>Skill</li>
              <p>
-              <textarea id = "skill3" placeholder="Skill"></textarea>
+              <textarea id = "skill3" placeholder="Skill" value="<?php echo $srow['skill3']; ?>"></textarea>
+               
 
              </p>
              <p> <input class=" w3-btn w3-hover-blue" type="submit" name="submit5" value="Save"></p>
@@ -305,7 +413,7 @@
 
             </div>
 
-
+				</form>
         <div  align="center">
         <div   align="center">
 
@@ -323,7 +431,7 @@
         </div>
 		<?php
 			echo $message;
-			$linl->close();
+			$link->close();
 		?>
         </div>
 

@@ -2,7 +2,8 @@
 	session_start();
 
 	if($_SESSION['islogin']) {
-		header("Location: home.php");
+		$uid = $_SESSION['user_id'];
+		header("Location: ViewProfile.php?user_id=$uid");
 	}
 	$error = '';
 	require '../secure/db.conf';
@@ -15,14 +16,17 @@
 		$query = $sql . $_POST['username'] . '";';
 		$result = mysqli_query($link, $query);
 		$row = mysqli_fetch_assoc($result);
+		$link->close();
 		if (password_verify($_POST['password'], $row['hashed_password'])) {
 			// Set session variables
 			$_SESSION['username'] = $_POST['username'];
 			$_SESSION['user_id'] = $row['user_id'];
 			$_SESSION['view_id'] = $_SESSION['user_id'];
-			$_SESSION['islogin'] = '1';
+			$_SESSION['islogin'] = 1;
+
+			$uid = $_SESSION['user_id'];
 			//redirect
-			header("Location: home.php");
+			header("Location: ViewProfile.php?user_id=$uid");
 		} else {
 			$error = 'Username and/or Password are incorrect!';
 		}

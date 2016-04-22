@@ -37,7 +37,9 @@
 		} else {
 			$message = "prepare fail";
 		}
+		$link->close();
 	}
+
 ?>
 <html>
 <head>

@@ -123,25 +123,13 @@
 	<div class="row" id="row1">
 		<div class="col-sm-4"></div>
 		<div class="col-sm-4" id ="button_toolbar">
-			<ul class="nav nav-pills">
-				<?php
-					//if($_SESSION['user_id'] == $_GET['user_id']) {
-					//	echo "<li role='presentation'><a href='editprofile.php?user_id=$view_id'>Edit Profile</a></li>";
-					//}
-				 ?>
-				 <!-- <li role="presentation"><a href="">Edit Profile</a></li> -->
-				 <!-- <li role="presentation" class="active"><a href="#">Profile</a></li>
-				 <li role="presentation"><a href="#">Connections</a></li>
-				 <li role="presentation"><a href="#">Groups</a></li>
-				 <li role="presentation"><a href="Top10.php">Top 10</a></li> -->
-		 	</ul>
 	 	</div>
 	 	<div class="col-sm-4"></div>
 	</div>
 
     <div class="row" id = "row2">
-        <div class="col-sm-1"></div>
-        <div class="col-sm-1"></div>
+     
+        <div class="col-sm-4"></div>
 
         <div class="col-sm-4" id="profile_info">
 <?php
@@ -157,8 +145,8 @@
 	            <h4 id = "address"><?php echo $row['city'] . ", " . $row['state']; ?></h4>
 			</div>
         </div>
-        <div class="col-sm-1"></div>
-        <div class="col-sm-1"></div>
+        <div class="col-sm-4"></div>
+
     </div>
 
     <div class="row" id="row3">
@@ -248,4 +236,5 @@
 		</div>
 	</div>
 </body>
+    
 </html>

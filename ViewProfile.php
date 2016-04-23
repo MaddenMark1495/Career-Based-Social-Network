@@ -152,8 +152,8 @@
 ?>
 			<div id="profile">
 				<h4 id="fullname"><?php echo $row['fname'] . " " . $row['lname']; ?></h4>
-	            <h4 id ="cur_title"><?php echo "cur_title";//echo $row['cur_title']; ?></h4>
-				<h4 id="cur_company"><?php echo "cur_company";//echo $row['cur_company']; ?></h4>
+	            <h4 id ="cur_title"><?php echo $row['cur_title']; ?></h4>
+				<h4 id="cur_company"><?php echo $row['cur_company']; ?></h4>
 	            <h4 id = "address"><?php echo $row['city'] . ", " . $row['state']; ?></h4>
 			</div>
         </div>
@@ -169,8 +169,8 @@
             	<h2>Background</h2>
             	<h4>Summary</h4>
 <?php
-	echo "<p id='summary'>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit,</p>";
-	//echo "<p id='summary'>" . $row['summary'] . "</p>";
+	//echo "<p id='summary'>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit,</p>";
+	echo "<p id='summary'>" . $row['summary'] . "</p>";
 ?>
 				<hr>
 				<h4>Experience</h4>

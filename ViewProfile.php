@@ -1,19 +1,21 @@
 <?php
 	session_start();
-/*
+
 	//redirect if not logged in
 	if(!$_SESSION['islogin']) {
-		header("Location: index.php");
+		$_SESSION['username'] = 'user';
+		$_SESSION['islogin'] = 1;
+		$_SESSION['user_id'] = 1;
+		//header("Location: index.php");
 	}
-*/
+
 	//user get variable to determine which profile to load
-	//$view_id = $_GET['user_id'];
+	if($_GET['user_id']) {
+		$view_id = $_GET['user_id'];
+	} else {
+		$view_id = 1;
+	}
 
-	//hardcoded for testing
-	$_SESSION['username'] = 'user';
-	$_SESSION['user_id'] = 1;
-
-	$view_id = 1;
 
 	require '../secure/db.conf';
     // Create connection
@@ -122,13 +124,12 @@
 
 	<div class="row" id="row1">
 		<div class="col-sm-4"></div>
-		<div class="col-sm-4" id ="button_toolbar">
-	 	</div>
+		<div class="col-sm-4" id ="button_toolbar"></div>
 	 	<div class="col-sm-4"></div>
 	</div>
 
     <div class="row" id = "row2">
-     
+
         <div class="col-sm-4"></div>
 
         <div class="col-sm-4" id="profile_info">
@@ -236,5 +237,5 @@
 		</div>
 	</div>
 </body>
-    
+
 </html>

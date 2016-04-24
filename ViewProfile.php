@@ -123,25 +123,13 @@
 	<div class="row" id="row1">
 		<div class="col-sm-4"></div>
 		<div class="col-sm-4" id ="button_toolbar">
-			<ul class="nav nav-pills">
-				<?php
-					//if($_SESSION['user_id'] == $_GET['user_id']) {
-					//	echo "<li role='presentation'><a href='editprofile.php?user_id=$view_id'>Edit Profile</a></li>";
-					//}
-				 ?>
-				 <!-- <li role="presentation"><a href="">Edit Profile</a></li> -->
-				 <!-- <li role="presentation" class="active"><a href="#">Profile</a></li>
-				 <li role="presentation"><a href="#">Connections</a></li>
-				 <li role="presentation"><a href="#">Groups</a></li>
-				 <li role="presentation"><a href="Top10.php">Top 10</a></li> -->
-		 	</ul>
 	 	</div>
 	 	<div class="col-sm-4"></div>
 	</div>
 
     <div class="row" id = "row2">
-        <div class="col-sm-1"></div>
-        <div class="col-sm-1"></div>
+     
+        <div class="col-sm-4"></div>
 
         <div class="col-sm-4" id="profile_info">
 <?php
@@ -152,13 +140,13 @@
 ?>
 			<div id="profile">
 				<h4 id="fullname"><?php echo $row['fname'] . " " . $row['lname']; ?></h4>
-	            <h4 id ="cur_title"><?php echo "cur_title";//echo $row['cur_title']; ?></h4>
-				<h4 id="cur_company"><?php echo "cur_company";//echo $row['cur_company']; ?></h4>
+	            <h4 id ="cur_title"><?php echo $row['cur_title']; ?></h4>
+				<h4 id="cur_company"><?php echo $row['cur_company']; ?></h4>
 	            <h4 id = "address"><?php echo $row['city'] . ", " . $row['state']; ?></h4>
 			</div>
         </div>
-        <div class="col-sm-1"></div>
-        <div class="col-sm-1"></div>
+        <div class="col-sm-4"></div>
+
     </div>
 
     <div class="row" id="row3">
@@ -169,8 +157,8 @@
             	<h2>Background</h2>
             	<h4>Summary</h4>
 <?php
-	echo "<p id='summary'>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit,</p>";
-	//echo "<p id='summary'>" . $row['summary'] . "</p>";
+	//echo "<p id='summary'>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit,</p>";
+	echo "<p id='summary'>" . $row['summary'] . "</p>";
 ?>
 				<hr>
 				<h4>Experience</h4>
@@ -248,4 +236,5 @@
 		</div>
 	</div>
 </body>
+    
 </html>

@@ -18,6 +18,12 @@
 
 	$message = '';
 	$link = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+
+	if(isset($_POST['remove'])) {
+		$id = $_POST['view_id'];
+		$sql = "DELETE FROM links WHERE (user_id=$uid AND linked_user_id=$id) OR (user_id=$id AND linked_user_id=$uid)";
+		$link->query($sql);
+	}
 ?>
 <!DOCTYPE html>
 <html>
@@ -142,8 +148,8 @@
 
 	    <div class="row" id="row2">
 			<div class="col-sm-4"></div>
-			<div class="col-sm-8" id ="button_toolbar">
-	            <h1>Who Are You Stalking?</h1>
+			<div class="col-sm-4" id ="button_toolbar">
+	            <h1 style="text-align: center">Connections</h1>
 	        </div>
 		 	<div class="col-sm-4"></div>
 		</div>
@@ -195,31 +201,52 @@
 						<input name="view_id" type="hidden" value="<?=$row['user_id'];?>">
 						<input name="view" type="submit" class="w3-btn w3-hover-green" value="View Profile">
 					</form>
+					
+					<form action=<?=$_SERVER['PHP_SELF']?> method="POST">
+						<input name="view_id" type="hidden" value="<?=$row['user_id'];?>">
+						<input name="remove" type="submit" class="w3-btn w3-hover-green" value="Unconnect">
+					</form>
 				</div>
 <?php
-		if($row['cur_title']) {
-			if($row['cur_company']) {
+		if($row['cur_title'] && $row['cur_company']) {
 ?>
 				<h6 id="job"><?php echo $row['cur_title'] . " at " . $row['cur_company']; ?></h6>
 <?php
-			} else {
+		} else if($row['cur_title' && !$row['cur_company']]){
 ?>
 				<h6 id="job"><?php echo $row['cur_title']; ?></h6>
 <?php
-			}
+		} else if($row['cur_company' && !$row['cur_title']]) {
+?>
+				<h6 id="job"><?php echo $row['cur_company']; ?></h6>
+<?php
 		} else {
 			echo "<h6>No Current Job Information</h6>";
 		}
-		if($row['state'] && $row['city']) {
+		if($row['state']) {
 			$sid = $row['state'];
 			$res = $link->query("SELECT state FROM states WHERE idstates=$sid");
 			$srow = $res->fetch_assoc();
-			$sres->free();
+			$res->free();
+
+			if($row['city']) {
 ?>
 				<h6 id="location"><?php echo $row['city'] . ", " . $srow['state']; ?></h6>
 <?php
+			} else {
+?>
+				<h6 id="location"><?php echo $srow['state']; ?></h6>
+<?php
+			}
 		} else {
-			echo "<h6>No Location Information</h6>";
+			if($row['city']) {
+?>
+				<h6 id="location"><?php echo $row['city']; ?></h6>
+<?php
+			}
+			else {
+				echo "<h6>No Location Information</h6>";
+			}
 		}
 ?>
 			</div>

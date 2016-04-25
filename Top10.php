@@ -95,12 +95,12 @@
 	 					              <ul class="dropdown-menu">
 	 					                <li><a href="ViewProfile.php?user_id=<?php echo $_SESSION['user_id'];?>">View Profile</a></li>
 	 					                <li><a href="editprofile.php">Edit Profile</a></li>
-	 									<li><a href="#">Who are you stalking?</a></li>
+	 									<li><a href="connections.php">Connections</a></li>
 	 					                <li><a href="logout.php">Logout</a></li>
 	 					                <li role="separator" class="divider"></li>
 	 					                <!--<li class="dropdown-header">Nav header</li>-->
 	 					                <li><a href="Top10.php">Top 10 Users</a></li>
-	 					                <li><a href="#">One more separated link</a></li>
+	 					                <!-- <li><a href="#">One more separated link</a></li> -->
 	 								</ul>
 	 							</li>
 	 						</ul>

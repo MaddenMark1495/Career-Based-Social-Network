@@ -62,51 +62,146 @@
 	}
 	if(isset($_POST['submit3'])) { // Was the form submitted?
 		$sql = "UPDATE work_experience SET title=?, company=?, start_date=?, end_date=?, description=? WHERE user_id=? AND experience_entry=?";
-		print_r($_POST);
+
 		if ($stmt = $link->prepare($sql)) {
-			for( $i = 1; $i < $_POST['exp_entries']; $i++) {
-				$title = $_POST['title'.$i];
-				$company = $_POST['company'.$i];
-				$start = $_POST['start_date'.$i];
-				$end = $_POST['end_date'.$i];
-				$description = $_POST['description'];
-				$stmt->bind_param("sssssii", $title, $company, $start, $end, $description, $uid, $i);
-				if($stmt->execute()) {
-					$message = "<h4>Success</h4>";
-				} else {
-					$message = "<h4>Failed</h4>";
-				}
+			$title = $_POST['title'];
+			$company = $_POST['company'];
+			$start = $_POST['start_date'];
+			$end = $_POST['end_date'];
+			$description = $_POST['description'];
+			$entry = $_POST['row_id'];
+			$stmt->bind_param("sssssii", $title, $company, $start, $end, $description, $uid, $entry);
+			if($stmt->execute()) {
+				$message = "<h4>Success</h4>";
+			} else {
+				$message = "<h4>Failed</h4>";
 			}
 			$stmt->close();
-			if(isset($_POST['title'.$i])) {
-				$sql = "INSERT INTO work_experience VALUES (?, ?, ?, ?, ?, ?, ?)";
-				if ($stmt = $link->prepare($sql)) {
-					$title = $_POST['title'.$i];
-					$company = $_POST['company'.$i];
-					$start = $_POST['start_date'.$i];
-					$end = $_POST['end_date'.$i];
-					$description = $_POST['description'];
-					$stmt->bind_param("iisssss", $uid, $i, $title, $company, $start, $end, $description);
-					if($stmt->execute()) {
-						$message = "<h4>Success</h4>";
-					} else {
-						$message = "<h4>Failed</h4>";
-					}
-					$stmt->close();
-				} else {
-					$message = "prepare fail";
-				}
+		} else {
+			$message = "prepare fail";
+		}
+	}
+	if(isset($_POST['submit3new'])) {
+		$sql = "INSERT INTO work_experience VALUES (?, ?, ?, ?, ?, ?, ?)";
+		if($stmt = $link->prepare($sql)) {
+			$entry = $_POST['row_id'];
+			$company = $_POST['company'];
+			$title = $_POST['title'];
+			$start = $_POST['start_date'];
+			$end = $_POST['end_date'];
+			$description = $_POST['description'];
+			$stmt->bind_param("iisssss", $uid, $entry, $company, $title, $start, $end, $description);
+			if($stmt->execute()) {
+				$message = "<h4>Success</h4>";
+			} else {
+				$message = "<h4>Failed</h4>";
+			}
+			$stmt->close();
+		} else {
+			$message = "prepare fail";
+		}
+	}
+	if(isset($_POST['delete_ed'])) {
+		$sql = "DELETE FROM education WHERE user_id=? AND education_entry=?";
+		if($stmt = $link->prepare($sql)) {
+			$entry = $_POST['row_id'];
+			$stmt->bind_param("ii", $uid, $entry);
+			if($stmt->execute()) {
+				$message = "<h4>Successfully Deleted</h4>";
+			} else {
+				$message = "<h4>Failed to Delete</h4>";
 			}
 		} else {
 			$message = "prepare fail";
 		}
 	}
-
-
 	if(isset($_POST['submit4'])) { // Was the form submitted?
-
+		$major = $_POST['major_name'];
+		if($_POST['new_major'] != '') {
+			$sql = "INSERT INTO major (major_name) VALUES (?)";
+			if($stmt = $link->prepare($sql)) {
+				$major_name = $_POST['new_major'];
+				$stmt->bind_param("s", $major_name);
+				$stmt->execute();
+				$major = $link->insert_id;
+				$stmt->close();
+			} else {
+				$message = "prepare fail";
+			}
+		}
+		$degree = $_POST['degree_type'];
+		if($_POST['new_degree'] != '') {
+			$sql = "INSERT INTO degree_type (degree_type_name) VALUES (?)";
+			if($stmt = $link->prepare($sql)) {
+				$degree_type = $_POST['new_degree'];
+				$stmt->bind_param("s", $degree_type);
+				$stmt->execute();
+				$degree = $link->insert_id;
+				$stmt->close();
+			} else {
+				$message = "prepare fail";
+			}
+		}
+		$sql = "UPDATE education SET school=?, deg_type_idx=?, major_idx=?, start_year=?, end_year=? WHERE user_id=? AND education_entry=?";
+		if($stmt = $link->prepare($sql)) {
+			$entry = $_POST['row_id'];
+			$school = $_POST['school'];
+			$start = $_POST['start_year'];
+			$end = $_POST['end_year'];
+			$stmt->bind_param("siissii", $school, $degree, $major, $start, $end, $uid, $entry);
+			if($stmt->execute()) {
+				$message = "<h4>Success</h4>";
+			} else {
+				$message = "<h4>Failed</h4>";
+			}
+		} else {
+			$message = "prepare fail";
+		}
 	}
-
+	if(isset($_POST['submit4new'])) {
+		$major = $_POST['major_name'];
+		if($_POST['new_major'] != '') {
+			$sql = "INSERT INTO major (major_name) VALUES (?)";
+			if($stmt = $link->prepare($sql)) {
+				$major_name = $_POST['new_major'];
+				$stmt->bind_param("s", $major_name);
+				$stmt->execute();
+				$major = $link->insert_id;
+				$stmt->close();
+			} else {
+				$message = "prepare fail";
+			}
+		}
+		$degree = $_POST['degree_type'];
+		if($_POST['new_degree'] != '') {
+			$sql = "INSERT INTO degree_type (degree_type_name) VALUES (?)";
+			if($stmt = $link->prepare($sql)) {
+				$degree_type = $_POST['new_degree'];
+				$stmt->bind_param("s", $degree_type);
+				$stmt->execute();
+				$degree = $link->insert_id;
+				$stmt->close();
+			} else {
+				$message = "prepare fail";
+			}
+		}
+		$sql = "INSERT INTO education VALUES (?, ?, ?, ?, ?, ?, ?)";
+		if($stmt = $link->prepare($sql)) {
+			$entry = $_POST['row_id'];
+			$school = $_POST['school'];
+			$start = $_POST['start_year'];
+			$end = $_POST['end_year'];
+			$stmt->bind_param("iisiiss", $uid, $entry, $school, $degree, $major, $start, $end);
+			if($stmt->execute()) {
+				$message = "<h4>Success</h4>".$_POST['degree_type']. " ".$_POST['major_name'];
+			} else {
+				$message = "<h4>Failed</h4>";
+			}
+			$stmt->close();
+		} else {
+			$message = "prepare fail";
+		}
+	}
 	if(isset($_POST['submit5'])) { // Was the form submitted?
 
 	}
@@ -274,75 +369,155 @@
 					<p><input class=" w3-btn w3-hover-blue" type="submit" name="submit2" value="Save"></p>
 				</form>
 				<hr>
-				<h4>Experience</h4>
+				<h3>Experience</h3>
 <?php
 	$sql = "SELECT * FROM work_experience WHERE user_id=$uid";
 	$result = $link->query($sql);
-?>
-				<form action="<?=$_SERVER['PHP_SELF']?>" method="POST" id="work_form">
-				</form>
-<?php
+
 	$i=0;
 	while($row = $result->fetch_assoc()) {
+		//print_r($row);
 		$i++;
 ?>
+				<form action="<?=$_SERVER['PHP_SELF']?>" method="POST">
 					<h5>Job Title <br>
-						<input form="work_form" name="title<?=$i?>" type="text" placeholder="Job Title" value="<?php echo $row['title']; ?>">
+						<input name="title" type="text" placeholder="Job Title" value="<?php echo $row['title']; ?>">
 					</h5>
 					<h5>Company <br>
-						<input form="work_form" name="company<?=$i?>" type="text" placeholder="Job Title" value="<?php echo $row['company']; ?>">
+						<input name="company" type="text" placeholder="Job Title" value="<?php echo $row['company']; ?>">
 					</h5>
-					<h5>Start - End <br>
-						<input form="work_form" name="start_date<?=$i?>" type="text" placeholder="Start date" value="<?php echo $row['start_date']; ?>">-
-						<input form="work_form" name="end_date<?=$i?>" type ="text" placeholder="End date" value="<?php echo $row['end_date']; ?>">
+					<h5>Start - End  (YYYY-MM-DD)<br>
+						<input name="start_date" type="text" placeholder="Start Date" value="<?php echo $row['start_date']; ?>">-
+						<input name="end_date" type ="text" placeholder="End Date" value="<?php echo $row['end_date']; ?>">
 					</h5>
-					<p><input form="work_form" name="description<?=$i?>" type ="text" placeholder="Description" value="<?php echo $row['description']; ?>"></p>
-					<form action="<?=$_SERVER['PHP_SELF']?>" method="POST">
-						<input type="hidden" name="row_id" value="<?=$i?>">
-						<input name="delete_work" type="submit" class="w3-btn w3-hover-blue" value="Delete Entry">
-					</form>
-					<p><hr></p>
+					<p><textarea name="description" placeholder="Description"><?php echo $row['description']; ?></textarea></p>
+					<input type="hidden" name="row_id" value="<?=$i?>">
+					<p><input class="w3-btn w3-hover-blue" type="submit" name="submit3" value="Save Changes"></p>
+				</form>
+				<form action="<?=$_SERVER['PHP_SELF']?>" method="POST">
+					<input type="hidden" name="row_id" value="<?=$i?>">
+					<p><input class="w3-btn w3-hover-blue" type="submit" name="delete_work" value="Delete Entry"></p>
+				</form>
+				<hr>
 <?php
-
 	}
+	$result->free();
 	$i++;
 ?>
+				<form  action="<?=$_SERVER['PHP_SELF']?>" method="POST">
 					<h5>Job Title <br>
-						<input form="work_form" name="title<?=$i?>" type="text" placeholder="Job Title">
+						<input name="title" type="text" placeholder="Job Title">
 					</h5>
 					<h5>Company <br>
-						<input form="work_form" name="company<?=$i?>" type="text" placeholder="Job Title">
+						<input name="company" type="text" placeholder="Job Title">
 					</h5>
-					<h5>Start - End (YYYY-MM-DD)<br>
-						<input form="work_form" name="start_date<?=$i?>" type="text" placeholder="Start date">-
-						<input form="work_form" name="end_date<?=$i?>" type ="text" placeholder="End date">
+					<h5>Start - End  (YYYY-MM-DD)<br>
+						<input name="start_date" type="text" placeholder="Start date">-
+						<input name="end_date" type ="text" placeholder="End date">
 					</h5>
-					<p><input form="work_form" name="description<?=$i?>" type ="text" placeholder="Description"></p>
-					<input form="work_form" type="hidden" name="exp_entries" value="<?=$i?>">
-					<p><input form="work_form" class="w3-btn w3-hover-blue" type="submit" name="submit3" value="Save"></p>
+					<p><textarea name="description" placeholder="Description"></textarea></p>
+					<input type="hidden" name="row_id" value="<?=$i?>">
+					<p><input class="w3-btn w3-hover-blue" type="submit" name="submit3new" value="Save New"></p>
 				</form>
 				<br>
 				<hr>
-				<h4>Education</h4>
+				<h3>Education</h3>
 <?php
-
+	$sql = "SELECT * FROM education INNER JOIN major on education.major_idx=major.major_idx INNER JOIN degree_type on education.deg_type_idx = degree_type.deg_type_idx WHERE education.user_id=$uid";
+	$result = $link->query($sql);
+	$i = 0;
+	while($row = $result->fetch_assoc()) {
+		$i++;
 ?>
-				<ul>
-					<li>School   -   Date</li>
-					<input name="school" type ="text" placeholder="school" value="<?php echo $erow['school']; ?>"><input name = "start_year"  type ="text"  placeholder="Start year" value="<?php echo $erow['start_year']; ?>">-<input name = "end_year"  type ="text"  placeholder="End year" value="<?php echo $erow['end_year']; ?>">
-					<input class=" w3-btn w3-hover-blue" type="submit" name="submit4" value="Save">
-				</ul>
+				<form id="school<?=$i?>" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
+					<h5>School <br>
+						<input name="school" type="text" placeholder="School" value="<?php echo $row['school']; ?>">
+					</h5>
+					<h5>Years <br>
+						<input name="start_year" type="text" placeholder="Start Year" value="<?php echo $row['start_year']; ?>">-
+						<input name="end_year" type="text" placeholder="End Year" value="<?php echo $row['end_year']; ?>">
+					</h5>
+					<h5>Major <br>
+						<select form="school<?=$i?>" name="major_name">
+<?php
+	$sql = "SELECT * FROM major";
+	$maj_result = $link->query($sql);
+	while($maj_row = $maj_result->fetch_assoc()) {
+		if($maj_row['major_idx'] == $row['major_idx']) {
+			echo "<option value='" . $maj_row['major_idx'] . "' selected>" . $maj_row['major_name'] . "</option>";
+		} else {
+			echo "<option value='" . $maj_row['major_idx'] . "'>" . $maj_row['major_name'] . "</option>";
+		}
+	}
+	$maj_result->free();
+?>
+						</select>  OR Enter New: <input name="new_major" type="text" placeholder="Major">
+					</h5>
+					<h5>Degree Type <br>
+						<select form="school<?=$i?>" name="degree_type">
+<?php
+	$sql = "SELECT * FROM degree_type";
+	$deg_result = $link->query($sql);
+	while($deg_row = $deg_result->fetch_assoc()) {
+		if($deg_row['deg_type_idx'] == $row['deg_type_idx']) {
+			echo "<option value='" . $deg_row['deg_type_idx'] . "' selected>" . $deg_row['degree_type_name'] . "</option>";
+		} else {
+			echo "<option value='" . $deg_row['deg_type_idx'] . "'>" . $deg_row['degree_type_name'] . "</option>";
+		}
+	}
+?>
+						</select>  OR Enter New: <input name="new_degree" type="text" placeholder="Degree">
+					</h5>
+					<input type="hidden" name="row_id" value="<?=$i?>">
+					<p><input class="w3-btn w3-hover-blue" type="submit" name="submit4" value="Save Changes"></p>
+				</form>
+				<form action="<?=$_SERVER['PHP_SELF']?>" method="POST">
+					<input type="hidden" name="row_id" value="<?=$i?>">
+					<p><input class="w3-btn w3-hover-blue" type="submit" name="delete_ed" value="Delete Entry"></p>
+				</form>
+				<hr>
+<?php
+	}
+	$result->free();
+	$i++;
+?>
+				<form id="school<?=$i?>" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
+					<h5>School <br>
+						<input name="school" type="text" placeholder="School">
+					</h5>
+					<h5>Years <br>
+						<input name="start_year" type="text" placeholder="Start Year">-
+						<input name="end_year" type="text" placeholder="End Year">
+					</h5>
+					<h5>Major <br>
+						<select form="school<?=$i?>" name="major_name">
+<?php
+	$sql = "SELECT * FROM major";
+	$maj_result = $link->query($sql);
+	while($maj_row = $maj_result->fetch_assoc()) {
+		echo "<option value='" . $maj_row['major_idx'] . "'>" . $maj_row['major_name'] . "</option>";
+	}
+	$maj_result->free();
+?>
+						</select>  OR Enter New: <input name="new_major" type="text" placeholder="Major">
+					</h5>
+					<h5>Degree Type <br>
+						<select form="school<?=$i?>" name="degree_type">
+<?php
+	$sql = "SELECT * FROM degree_type";
+	$deg_result = $link->query($sql);
+	while($deg_row = $deg_result->fetch_assoc()) {
+		echo "<option value='" . $deg_row['deg_type_idx'] . "'>" . $deg_row['degree_type_name'] . "</option>";
+	}
+?>
+						</select>  OR Enter New: <input name="new_degree" type="text" placeholder="Degree">
+					</h5>
+					<input type="hidden" name="row_id" value="<?=$i?>">
+					<p><input class="w3-btn w3-hover-blue" type="submit" name="submit4new" value="Save New"></p>
+				</form>
                 <hr>
 				<h4>Skills</h4>
-				<ul id="skils_list">
-					<li>Skill</li>
-					<textarea id = "skill1" placeholder="Skill" value="<?php echo $srow['skill1']; ?>"></textarea>
-					<li>Skill</li>
-					<textarea id = "skill2" placeholder="Skill" value="<?php echo $srow['skill2']; ?>"></textarea>
-					<li>Skill</li>
-					<textarea id = "skill3" placeholder="Skill" value="<?php echo $srow['skill3']; ?>"></textarea>
-					<p> <input class=" w3-btn w3-hover-blue" type="submit" name="submit5" value="Save"></p>
-				</ul>
+				
 			</div>
 			<div  align="center">
 				<div   align="center"></div>

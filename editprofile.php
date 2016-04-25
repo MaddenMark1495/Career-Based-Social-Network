@@ -206,7 +206,7 @@
 	$sql = "UPDATE skills inner join user_skills on user_skills.skills_id=skills.skills_id SET skills.skill =? where user_skills.user_id=? AND skills.skills_id = ?";
 
 		if ($stmt = $link->prepare($sql)) {
-		for( $i = 1; $i < $_POST['skill_id']; $i++) 
+		for( $i = 1; $i < $_POST['skill_id']; $i++)
 			$skill=$_POST['skill'.$i];
 			$stmt->bind_param("sss", $skill, $uid,$i);
 			if($stmt->execute()) {
@@ -304,7 +304,7 @@
  					              <ul class="dropdown-menu">
  					                <li><a href="ViewProfile.php?user_id=<?php echo $_SESSION['user_id'];?>">View Profile</a></li>
  					                <li><a href="editprofile.php">Edit Profile</a></li>
- 									<li><a href="#">Who are you stalking?</a></li>
+ 									<li><a href="connections.php">Connections</a></li>
  					                <li><a href="logout.php">Logout</a></li>
  					                <li role="separator" class="divider"></li>
  					                <!--<li class="dropdown-header">Nav header</li>-->
@@ -531,28 +531,28 @@
 				</form>
                 <hr>
 				<h4>Skills</h4>
-			
+
 <?php
-$id =1;
 	$sql = "SELECT * from user_skills inner join skills on user_skills.skills_id=skills.skills_id where user_skills.user_id=$uid ";
-				
+
 	$ss = $link->query($sql);
+	$i=0;
 	while($srow = $ss->fetch_assoc()){
-	$id++;
+	$i++;
 ?>
 				<ul id="skils_list">
-				
-					
+
+
 					<li>Skill</li>
-					<input id = "skill" name = "skill<?=$i?>"placeholder="Skill" value="<?php echo $srow['skill']; ?>">
-					<input form="work_form" type="hidden" name="skill_id" value="<?=$id?>">
+					<input name = "skill<?=$i?>"placeholder="Skill" value="<?php echo $srow['skill']; ?>">
+					<input type="hidden" name="skill_id" value="<?=$i?>">
 <?php
 		}
 ?>
-				<p> <input class=" w3-btn w3-hover-blue" type="submit" name="submit4" value="Save"></p>
+				<p> <input class="w3-btn w3-hover-blue" type="submit" name="submit4" value="Save"></p>
 			</div>
-			<div  align="center">
-				<div   align="center"></div>
+			<div align="center">
+				<div align="center"></div>
 			</div>
 		</div>
 	</div>

@@ -11,7 +11,7 @@
 	if(isset($_POST['submit'])) { // Was the form submitted?
 		$link = mysqli_connect("$dbhost","$dbuser","$dbpass","$dbname") or die ("Connection Error " . mysqli_error($link));
 
-		$sql = "INSERT INTO `linkedout`.`users` (`username`, `hashed_password`, `fname`, `lname`, `user_email`) VALUES (?, ?, ?, ?, ?)";
+		$sql = "INSERT INTO `linkedout`.`users` (`username`, `hashed_password`, `fname`, `lname`, `user_email`, `state`) VALUES (?, ?, ?, ?, ?, 51)";
 
 		if ($stmt = mysqli_prepare($link, $sql)) {
 			if(strcmp($_POST['password'], $_POST['cpassword']) == 0) {

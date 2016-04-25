@@ -10,7 +10,7 @@
 	}
 
 	//user get variable to determine which profile to load
-	if($_GET['user_id']) {
+	if(isset($_GET['user_id'])) {
 		$view_id = $_GET['user_id'];
 	} else {
 		$view_id = 1;

@@ -203,7 +203,21 @@
 		}
 	}
 	if(isset($_POST['submit5'])) { // Was the form submitted?
+	$sql = "UPDATE skills inner join user_skills on user_skills.skills_id=skills.skills_id SET skills.skill =? where user_skills.user_id=? AND skills.skills_id = ?";
 
+		if ($stmt = $link->prepare($sql)) {
+		for( $i = 1; $i < $_POST['skill_id']; $i++) 
+			$skill=$_POST['skill'.$i];
+			$stmt->bind_param("sss", $skill, $uid,$i);
+			if($stmt->execute()) {
+				$message = "<h4>Success</h4>";
+			} else {
+				$message = "<h4>Failed</h4>";
+			}
+			$stmt->close();
+		} else {
+			$message = "prepare fail";
+		}
 	}
  ?>
 <!DOCTYPE html>
@@ -517,7 +531,25 @@
 				</form>
                 <hr>
 				<h4>Skills</h4>
+			
+<?php
+$id =1;
+	$sql = "SELECT * from user_skills inner join skills on user_skills.skills_id=skills.skills_id where user_skills.user_id=$uid ";
 				
+	$ss = $link->query($sql);
+	while($srow = $ss->fetch_assoc()){
+	$id++;
+?>
+				<ul id="skils_list">
+				
+					
+					<li>Skill</li>
+					<input id = "skill" name = "skill<?=$i?>"placeholder="Skill" value="<?php echo $srow['skill']; ?>">
+					<input form="work_form" type="hidden" name="skill_id" value="<?=$id?>">
+<?php
+		}
+?>
+				<p> <input class=" w3-btn w3-hover-blue" type="submit" name="submit4" value="Save"></p>
 			</div>
 			<div  align="center">
 				<div   align="center"></div>

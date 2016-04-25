@@ -351,14 +351,17 @@
 				<h4 id = "address">City, State
 					<input class = 'form-control' type ="text" name = "city" placeholder="City" value="<?php echo $user_row['city']; ?>">
 					<select form="user" name="state">
+						<option value="51" selected></option>
 <?php
 	$sql = "SELECT * FROM states";
 	$result = $link->query($sql);
 	while($row = $result->fetch_assoc()) {
-		if($row['idstates'] == $user_row['state']) {
-			echo "<option value='" . $row['idstates'] . "' selected>" . $row['state'] . "</option>";
-		} else {
-			echo "<option value='" . $row['idstates'] . "'>" . $row['state'] . "</option>";
+		if($row['idstates'] != 51) {
+			if($row['idstates'] == $user_row['state']) {
+				echo "<option value='" . $row['idstates'] . "' selected>" . $row['state'] . "</option>";
+			} else {
+				echo "<option value='" . $row['idstates'] . "'>" . $row['state'] . "</option>";
+			}
 		}
 	}
 	$result->free();

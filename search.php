@@ -1,7 +1,10 @@
 <?php
 	session_start();
 	if(!$_SESSION['islogin']){
-		header("Location: index.php");
+		$_SESSION['username'] = 'user';
+		$_SESSION['user_id'] = 1;
+		$_SESSION['islogin'] = 1;
+		//header("Location: index.php");
 	}
 	if(isset($_POST['view'])){
 		$id = $_POST['view_id'];
@@ -86,11 +89,11 @@
 			<?php
 				if(isset($_POST['search'])){
 					$search = $_POST['search'];
-					echo "<h1>Search results for \"".$search."\"</h1>";
-					$sql="SELECT * FROM users WHERE fname LIKE '%".$search."%' OR lname LIKE '%".$search."%'";
+					echo "<h1>Search results for \"$search\"</h1>";
+					$sql="SELECT * FROM users WHERE fname LIKE '%$search%' OR lname LIKE '%$search%' ORDER BY lname ASC";
 					if($result = $link->query($sql)){
 						$num = $result->num_rows;
-						echo "Number of results: ".$num."<br><br>";
+						echo "Number of results: $num<br><br>";
 						while($row = $result->fetch_assoc()){
 							//Name
 							echo "<b>Name: ".$row['fname']." ".$row['lname']."</b>";

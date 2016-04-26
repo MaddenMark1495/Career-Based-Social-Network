@@ -78,12 +78,12 @@
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
-                        <form action="search.php" class="navbar-form navbar-left" role="search" method="post">
-                            <div class="form-group">
-                                <input name="search" type="text" class="form-control" placeholder="People, jobs, Etc." required>
-                            </div>
-                            <button type="submit" class="btn btn-default">Search</button>
-                        </form>
+                    <form class="navbar-form navbar-left" role="search">
+                    <div class="form-group">
+          <input type="text" class="form-control" placeholder="People, jobs, Etc.">
+        </div>
+        <button type="submit" class="btn btn-default">Search</button>
+      </form>
 
                       <ul class="nav navbar-nav navbar-right">
                           <li><a href="logout.php">Logout</a></li>

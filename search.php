@@ -44,6 +44,10 @@
 			h4, h5, p{
 				padding-left: 10px
 			}
+			nav div.container-fluid {
+	 		   padding-left: 100px;
+	 		   padding-right: 100px;
+	 	   }
 		</style>
 	</head>
 	<body>
@@ -51,6 +55,7 @@
 			<div class="col-sm-12">
 				<nav class="navbar navbar-inverse navbar-fixed-top">
 					<div class="container-fluid">
+						<div class="col-sm-1"></div>
 						<div class="navbar-header">
 							<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
 								<span class="sr-only">Toggle navigation</span>
@@ -63,7 +68,7 @@
 						<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 							<form class="navbar-form navbar-left" role="search" method="post">
 								<div class="form-group">
-									<input name="search" type="text" class="form-control" placeholder="People, jobs, Etc." value='<?=$_POST['search']?>' required>
+									<input name="search" type="text" class="form-control" placeholder="" value='<?=$_POST['search']?>' required>
 								</div>
 								<button type="submit" class="btn btn-default">Search</button>
 							</form>
@@ -81,6 +86,7 @@
 								</li>
 							</ul>
 						</div>
+						<div class="col-sm-1"></div>
 					</div>
 				</nav>
 			</div>

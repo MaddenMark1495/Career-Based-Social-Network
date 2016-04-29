@@ -229,9 +229,8 @@
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="page1.css">
         <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open Sans">
-
+		<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
 
     <style>
         .row{
@@ -266,6 +265,10 @@
         h4, h5, p{
             padding-left: 10px;
         }
+		nav div.container-fluid {
+ 		   padding-left: 100px;
+ 		   padding-right: 100px;
+ 	   }
 
     </style>
 
@@ -274,30 +277,28 @@
 
 <body>
 	<div class="row" id="row0">
-             <div class="col-sm-12">
-                 <nav class="navbar navbar-inverse navbar-fixed-top">
- 					<div class="container-fluid">
-                     	<!-- Brand and toggle get grouped for better mobile display -->
- 	                    <div class="navbar-header">
- 	                      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
- 	                        <span class="sr-only">Toggle navigation</span>
+		<div class="col-sm-12">
+			<nav class="navbar navbar-inverse navbar-fixed-top">
+				<div class="container-fluid">
+					<div class="col-sm-1"></div>
+					<!-- Brand and toggle get grouped for better mobile display -->
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+							<span class="sr-only">Toggle navigation</span>
  	                        <span class="icon-bar"></span>
  	                        <span class="icon-bar"></span>
  	                        <span class="icon-bar"></span>
- 	                      </button>
- 	                      <a class="navbar-brand" id="Icon" href="index.php">LinkedOut</a>
- 	                    </div>
-
+						</button>
+						<a class="navbar-brand" id="Icon" href="index.php">LinkedOut</a>
+					</div>
                      <!-- Collect the nav links, forms, and other content for toggling -->
                      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-
 						<form action="search.php" class="navbar-form navbar-left" role="search" method="post">
 							<div class="form-group">
-								<input name="search" type="text" class="form-control" placeholder="People, jobs, Etc." required>
+								<input name="search" type="text" class="form-control" placeholder="" required>
 							</div>
 							<button type="submit" class="btn btn-default">Search</button>
 						</form>
-
  	                	<ul class="nav navbar-nav navbar-right">
  							<li class="dropdown">
  				              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo $_SESSION['username']; ?> <span class="caret"></span></a>
@@ -314,6 +315,7 @@
  							</li>
  						</ul>
  					</div><!-- /.navbar-collapse -->
+					<div class="col-sm-1"></div>
  				</div><!-- /.container-fluid -->
  			</nav>
  		</div>
@@ -411,7 +413,7 @@
 					<input type="hidden" name="row_id" value="<?=$i?>">
 					<p><input class="w3-btn w3-hover-blue" type="submit" name="submit3" value="Save Changes"></p>
 				</form>
-				<form action="<?=$_SERVER['PHP_SELF']?>" method="POST">
+				<form role="form" class="form-inline" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
 					<input type="hidden" name="row_id" value="<?=$i?>">
 					<p><input class="w3-btn w3-hover-blue" type="submit" name="delete_work" value="Delete Entry"></p>
 				</form>

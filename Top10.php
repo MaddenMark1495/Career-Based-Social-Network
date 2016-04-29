@@ -20,8 +20,8 @@
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="page1.css">
         <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open Sans">
+		<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
 
 		<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 		<script src="jquery-1.12.0.min.js"></script>
@@ -60,6 +60,10 @@
 			  display: table;
 			  clear: both;
 			}
+			nav div.container-fluid {
+	 		   padding-left: 100px;
+	 		   padding-right: 100px;
+	 	   }
 		</style>
 
 	</head>
@@ -84,7 +88,7 @@
 
 							<form action="search.php" class="navbar-form navbar-left" role="search" method="post">
 								<div class="form-group">
-									<input name="search" type="text" class="form-control" placeholder="People, jobs, Etc." required>
+									<input name="search" type="text" class="form-control" placeholder="" required>
 								</div>
 								<button type="submit" class="btn btn-default">Search</button>
 							</form>

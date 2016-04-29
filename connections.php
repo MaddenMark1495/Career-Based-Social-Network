@@ -82,7 +82,10 @@
         display:inline;
 
     }
-
+	nav div.container-fluid {
+		padding-left: 100px;
+		padding-right: 100px;
+	}
 
     </style>
 
@@ -110,7 +113,7 @@
                     	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 							<form action="search.php" class="navbar-form navbar-left" role="search" method="post">
 								<div class="form-group">
-									<input name="search" type="text" class="form-control" placeholder="People, jobs, Etc." required>
+									<input name="search" type="text" class="form-control" placeholder="" required>
 								</div>
 								<button type="submit" class="btn btn-default">Search</button>
 							</form>
@@ -157,26 +160,7 @@
 		<div class="row" id = "search_row">
 			<div class="col-sm-1"></div>
 			<div class="col-sm-1"></div>
-			<div class="col-sm-8">
-				<div class="dropdown" id = "Filter">
-					<button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown">Filter By
-						<span class="caret"></span></button>
-						<ul class="dropdown-menu">
-							<li><a href="#">All Contacts</a></li>
-							<li><a href="#">Tag</a></li>
-							<li><a href="#">Source</a></li>
-						</ul>
-				</div>
-				<div class="dropdown" id = "Sort">
-					<button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown">Sort By
-						<span class="caret"></span></button>
-						<ul class="dropdown-menu">
-							<li><a href="#">Recently Added</a></li>
-							<li><a href="#">First Name</a></li>
-							<li><a href="#">Last Name</a></li>
-						</ul>
-				</div>
-			</div>
+			<div class="col-sm-8"></div>
 			<div class="col-sm-1"></div>
 			<div class="col-sm-1"></div>
 		</div>
@@ -201,7 +185,7 @@
 						<input name="view_id" type="hidden" value="<?=$row['user_id'];?>">
 						<input name="view" type="submit" class="w3-btn w3-hover-green" value="View Profile">
 					</form>
-					
+
 					<form action=<?=$_SERVER['PHP_SELF']?> method="POST">
 						<input name="view_id" type="hidden" value="<?=$row['user_id'];?>">
 						<input name="remove" type="submit" class="w3-btn w3-hover-green" value="Unconnect">

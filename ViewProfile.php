@@ -9,6 +9,7 @@
 		//header("Location: index.php");
 	}
 
+	$uid = $_SESSION['user_id'];
 	//user get variable to determine which profile to load
 	if(isset($_GET['user_id'])) {
 		$view_id = $_GET['user_id'];
@@ -16,10 +17,10 @@
 		$view_id = 1;
 	}
 
-
 	require '../secure/db.conf';
     // Create connection
 	$conn = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+	$message = '';
 	// Check connection
 	if ($conn->connect_error) {
 	    die("Connection failed: " . $conn->connect_error);
@@ -28,6 +29,26 @@
 	if($_SESSION['user_id'] != $view_id) {
 		$sql = "UPDATE users SET profile_views = profile_views+1 WHERE user_id=$view_id";
 		$conn->query($sql);
+	}
+
+	if(isset($_POST['unconnect'])) {
+		$id = $_POST['view_id'];
+		$sql = "DELETE FROM links WHERE (user_id=$uid AND linked_user_id=$id) OR (user_id=$id AND linked_user_id=$uid)";
+		if($conn->query($sql)) {
+			$message = "Successfully Unconnected";
+		} else {
+			$message = "Failed to Unconnect";
+		}
+	}
+	if(isset($_POST['connect'])) {
+		$id = $_POST['view_id'];
+		$date = date_create()->format('Y-m-d');
+		$sql = "INSERT INTO links VALUES ($uid, $id, '$date')";
+		if($conn->query($sql)) {
+			$message = "Successfuly Connected";
+		} else {
+			$message = "Failed to Connect";
+		}
 	}
 ?>
 <!DOCTYPE html>
@@ -39,9 +60,8 @@
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="page1.css">
         <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open Sans">
-
+		<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
 
     <style>
         .row{
@@ -67,36 +87,37 @@
 	   h4, h5, p{
 		   padding-left: 10px;
 	   }
+	   nav div.container-fluid {
+		   padding-left: 100px;
+		   padding-right: 100px;
+	   }
     </style>
 </head>
 
 <body>
 
-   <div class="row" id="row0">
-            <div class="col-sm-12">
-                <nav class="navbar navbar-inverse navbar-fixed-top">
-					<div class="container-fluid">
-                    	<!-- Brand and toggle get grouped for better mobile display -->
-	                    <div class="navbar-header">
-	                      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-	                        <span class="sr-only">Toggle navigation</span>
+	<div class="row" id="row0">
+		<div class="col-sm-12">
+			<nav class="navbar navbar-inverse navbar-fixed-top">
+				<div class="container-fluid">
+					<!-- Brand and toggle get grouped for better mobile display -->
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+							<span class="sr-only">Toggle navigation</span>
 	                        <span class="icon-bar"></span>
 	                        <span class="icon-bar"></span>
 	                        <span class="icon-bar"></span>
-	                      </button>
-	                      <a class="navbar-brand" id="Icon" href="index.php">LinkedOut</a>
-	                    </div>
-
+						</button>
+						<a class="navbar-brand" id="Icon" href="index.php">LinkedOut</a>
+					</div>
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-
 						<form action="search.php" class="navbar-form navbar-left" role="search" method="post">
 							<div class="form-group">
-								<input name="search" type="text" class="form-control" placeholder="People, jobs, Etc." required>
+								<input name="search" type="text" class="form-control" placeholder="" required>
 							</div>
 							<button type="submit" class="btn btn-default">Search</button>
 						</form>
-
 	                	<ul class="nav navbar-nav navbar-right">
 							<li class="dropdown">
 				              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo $_SESSION['username']; ?> <span class="caret"></span></a>
@@ -138,6 +159,7 @@
 	$result = $conn->query($sql);
 
 	$row = $result->fetch_assoc();
+	$result->free();
 ?>
 			<div id="profile">
 				<h4 id="fullname"><?php echo $row['fname'] . " " . $row['lname']; ?></h4>
@@ -146,7 +168,41 @@
 	            <h4 id = "address"><?php echo $row['city'] . ", " . $row['state']; ?></h4>
 			</div>
         </div>
-        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+			<form action="ViewProfile.php?user_id=<?=$view_id?>" method="POST">
+				<input type="hidden" name="view_id" value="<?=$view_id?>">
+<?php
+	if($uid != $view_id) {
+		$sql = "select * from users ";
+		$sql .=	"inner join (select linked_user_id, linked_date from links where user_id=$uid union ";
+		$sql .= "select user_id, linked_date from links where linked_user_id=$uid) as user_links ";
+		$sql .= "where users.user_id=user_links.linked_user_id";
+
+		$friend = false;
+		$result = $conn->query($sql);
+		while($frow = $result->fetch_assoc()) {
+			if($view_id == $frow['user_id']) {
+				$friend = true;
+			}
+		}
+		$result->free();
+
+		if($friend) {
+			//show unconnect button
+?>
+				<input type="submit" name="unconnect" value="Unconnect" class="w3-btn w3-hover-green">
+<?php
+		} else {
+			//show add connect button
+?>
+				<input type="submit" name="connect" value="Connect with <?=$row['fname']?>" class="w3-btn w3-hover-green">
+<?php
+		}
+	}
+?>
+			</form>
+			<p><?=$message?></p>
+		</div>
 
     </div>
 
@@ -158,7 +214,6 @@
             	<h2>Background</h2>
             	<h4>Summary</h4>
 <?php
-	//echo "<p id='summary'>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit,</p>";
 	echo "<p id='summary'>" . $row['summary'] . "</p>";
 ?>
 				<hr>
@@ -177,10 +232,11 @@
 		echo "<p id='job_description'>Description:</p><p>" . $row['description'] . "</p>";
 		echo "</div>";
 		if($count < $n) {
-			echo "hr";
+			echo "<hr>";
 		}
 	}
 	echo "</ul>";
+	$result->free();
 ?>
 				<hr>
 				<h4>Education</h4>
@@ -192,6 +248,7 @@
 	while($row = $result->fetch_assoc()) {
 		echo "<li>" . $row['school'] . ": " . $row['start_year'] . " - " . $row['end_year'] . ": " . $row['degree_type_name']. " in " . $row['major_name'] . "</li>";
 	}
+	$result->free();
 ?>
 				</ul>
 				<hr>
@@ -209,27 +266,9 @@
 			echo ", ";
 		}
 	}
-?>
-				</ul>
-				<hr>
-				<h4>Followed Groups - i think we need to remove</h4>
-				<ul id="followed_list">
-<?PHP
-    $sql = "SELECT DISTINCT organizations.org_name from users_orgs inner join users on users.user_id=users_orgs.user_id inner join organizations on organizations.org_id=users_orgs.org_id where users.user_id=$view_id";
-    $result = $conn->query($sql);
-
-    if ($result->num_rows > 0) {
-        // output data of each row
-        while($row = $result->fetch_assoc()) {
-            //print_r($row);
-            echo "<li>".$row['org_name']."</li>";
-        }
-    } else {
-        echo "0 results";
-    }
-
+	$result->free();
 	$conn->close();
-    ?>
+?>
 				</ul>
 			</div>
 			<div class="col-sm-1"></div>
@@ -237,5 +276,4 @@
 		</div>
 	</div>
 </body>
-
 </html>

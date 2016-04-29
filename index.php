@@ -50,6 +50,10 @@
             .w3-btn{
                 width:150px;
             }
+			nav div.container-fluid {
+				padding-left: 100px;
+				padding-right: 100px;
+			}
 		</style>
 	</head>
 	<body>

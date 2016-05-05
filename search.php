@@ -95,8 +95,10 @@
 			<?php
 				if(isset($_POST['search'])){
 					$search = $_POST['search'];
+					$first = strtok($search, " ");
+					$last = strtok($search, " ");
 					echo "<h1>Search results for \"$search\"</h1>";
-					$sql="SELECT * FROM users WHERE fname LIKE '%$search%' OR lname LIKE '%$search%' ORDER BY lname ASC";
+					$sql="SELECT * FROM users WHERE fname LIKE '%$first%' OR lname LIKE '%$last%' ORDER BY lname ASC";
 					if($result = $link->query($sql)){
 						$num = $result->num_rows;
 						echo "Number of results: $num<br><br>";

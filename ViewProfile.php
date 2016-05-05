@@ -84,7 +84,7 @@
 	   body{
 		   background-color:#f2f2f2;
 	   }
-	   h4, h5, p{
+	   h2, h4, h5, p{
 		   padding-left: 10px;
 	   }
 	   nav div.container-fluid {
@@ -127,9 +127,7 @@
 									<li><a href="connections.php">Connections</a></li>
 					                <li><a href="logout.php">Logout</a></li>
 					                <li role="separator" class="divider"></li>
-					                <!--<li class="dropdown-header">Nav header</li>-->
 					                <li><a href="Top10.php">Top 10 Users</a></li>
-					                <!-- <li><a href="#">One more separated link</a></li> -->
 								</ul>
 							</li>
 						</ul>
@@ -145,14 +143,23 @@
 
 	<div class="row" id="row1">
 		<div class="col-sm-4"></div>
-		<div class="col-sm-4" id ="button_toolbar"></div>
-	 	<div class="col-sm-4"></div>
+		<div class="col-sm-4">
+<?php
+	if($message) {
+?>
+			<div class="alert alert-info">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Info!</strong> <?=$message?>
+			</div>
+<?php
+	}
+?>
+		</div>
+		<div class="col-sm-4"></div>
 	</div>
 
     <div class="row" id = "row2">
-
         <div class="col-sm-4"></div>
-
         <div class="col-sm-4" id="profile_info">
 <?php
 	$sql = "SELECT * FROM users INNER JOIN states on users.state=states.idstates WHERE user_id=$view_id";
@@ -201,7 +208,6 @@
 	}
 ?>
 			</form>
-			<p><?=$message?></p>
 		</div>
 
     </div>
@@ -212,10 +218,15 @@
         <div class="col-sm-8">
             <div id = "background">
             	<h2>Background</h2>
+				<hr>
             	<h4>Summary</h4>
+				<ul>
+					<div>
 <?php
 	echo "<p id='summary'>" . $row['summary'] . "</p>";
 ?>
+					</div>
+				</ul>
 				<hr>
 				<h4>Experience</h4>
 <?php
@@ -229,7 +240,7 @@
 		echo "<div>";
 		echo "<p id='job_title'>Title: " . $row['title'] . "</p>";
 		echo "<p id='job_date'>Date: " . $row['start_date'] . " to " . $row['end_date'] . "</p>";
-		echo "<p id='job_description'>Description:</p><p>" . $row['description'] . "</p>";
+		echo "<p id='job_description'>Description:</p><div style='padding-left:30px'>" . $row['description'] . "</div>";
 		echo "</div>";
 		if($count < $n) {
 			echo "<hr>";
@@ -244,9 +255,15 @@
 <?php
 	$sql = "SELECT * FROM education INNER JOIN major on education.major_idx=major.major_idx INNER JOIN degree_type on education.deg_type_idx = degree_type.deg_type_idx WHERE education.user_id=$view_id";
 	$result = $conn->query($sql);
-
+	$n = $result->num_rows;
+	$count=0;
 	while($row = $result->fetch_assoc()) {
-		echo "<li>" . $row['school'] . ": " . $row['start_year'] . " - " . $row['end_year'] . ": " . $row['degree_type_name']. " in " . $row['major_name'] . "</li>";
+		++$count;
+		echo "<p>" . $row['school'] . ": " . $row['start_year'] . " - " . $row['end_year'] . "</p>";
+		echo "<p>" . $row['degree_type_name']. " in " . $row['major_name'] . "</p>";
+		if($count < $n) {
+			echo "<hr>";
+		}
 	}
 	$result->free();
 ?>
@@ -261,7 +278,7 @@
 	$count = 0;
 	while($row = $result->fetch_assoc()) {
 		++$count;
-		echo $row['skill']; //"<li>" . $row['skill'] . "</li>";
+		echo $row['skill'];
 		if($count < $n) {
 			echo ", ";
 		}

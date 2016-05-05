@@ -37,6 +37,7 @@
 		<!--  I USE BOOTSTRAP BECAUSE IT MAKES FORMATTING/LIFE EASIER -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"><!-- Latest compiled and minified CSS -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"><!-- Optional theme -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script><!-- Latest compiled and minified JavaScript -->
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
@@ -57,7 +58,7 @@
 		</style>
 	</head>
 	<body>
-	    <div id="rownav">
+		<div id="rownav">
 	        <div class="col-sm-12">
 	            <nav class="navbar navbar-inverse navbar-fixed-top">
 	              <div class="container-fluid">
@@ -76,6 +77,23 @@
 	            </div>
 	        </div>
 	    </div>
+
+		<div class="row" id="row1">
+			<div class="col-sm-4"></div>
+			<div class="col-sm-4">
+	<?php
+		if($error) {
+	?>
+				<div class="alert alert-info">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+					<strong>Info!</strong> <?=$error?>
+				</div>
+	<?php
+		}
+	?>
+			</div>
+			<div class="col-sm-4"></div>
+		</div>
 
     	<div class="container">
 			<div class="row">
@@ -100,8 +118,5 @@
 				</div>
         	</div>
 		</div>
-		<?php
-				echo "<h4>".$error."<h4>";
-		 ?>
 	</body>
 </html>

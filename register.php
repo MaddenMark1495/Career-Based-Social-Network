@@ -24,15 +24,15 @@
 
 				if(mysqli_stmt_bind_param($stmt, "sssss", $user, $hpass, $fname, $lname, $email)) {
 					if(mysqli_stmt_execute($stmt)) {
-						$message = "<h4>Success</h4>";
+						$message = "Registration Successful";
 					} else {
-						$message = "<h4>Failed</h4>";
+						$message = "Registration Failed";
 					}
 				} else {
 					$message = "bind fail";
 				}
 			} else {
-				$message = "<h4>Passwords Do Not Match</h4>";
+				$message = "Passwords Do Not Match";
 			}
 		} else {
 			$message = "prepare fail";
@@ -43,12 +43,13 @@
 ?>
 <html>
 <head>
-<!--  I USE BOOTSTRAP BECAUSE IT MAKES FORMATTING/LIFE EASIER -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"><!-- Latest compiled and minified CSS -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"><!-- Optional theme -->
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script><!-- Latest compiled and minified JavaScript -->
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+		<!--  I USE BOOTSTRAP BECAUSE IT MAKES FORMATTING/LIFE EASIER -->
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open Sans">
+		<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<style>
 		.w3-btn{width:150px;}
 		h4 {
@@ -78,6 +79,22 @@
             </div>
         </div>
     </div>
+	<div class="row" id="row1">
+		<div class="col-sm-4"></div>
+		<div class="col-sm-4">
+<?php
+	if($message) {
+?>
+			<div class="alert alert-info">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Info!</strong> <?=$message?>
+			</div>
+<?php
+	}
+?>
+		</div>
+		<div class="col-sm-4"></div>
+	</div>
     <div class="container">
 			<div class="row">
 				<div class="col-md-4 col-sm-4 col-xs-3"></div>
@@ -118,7 +135,6 @@
 					</form>
 				</div>
 			</div>
-			<?php echo $message; ?>
 		</div>
 	</body>
 </html>

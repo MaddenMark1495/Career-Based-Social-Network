@@ -6,10 +6,7 @@
 		$_SESSION['islogin'] = 1;
 		//header("Location: index.php");
 	}
-	if(isset($_POST['view'])){
-		$id = $_POST['view_id'];
-		header("Location: ViewProfile.php?user_id=$id");
-	}
+
 	$uid = $_SESSION['user_id'];
 	require "../secure/db.conf";
 	if(!$link = new mysqli($dbhost, $dbuser, $dbpass, $dbname)){
@@ -37,8 +34,8 @@
 				margin-bottom: 15px;
 				margin-top: 15px
 			}
-			#button{
-				padding-top: 20px
+			.button{
+
 			}
 			#background{
 				border: 1px solid grey;
@@ -52,7 +49,8 @@
 				display: inline-block;
 				vertical-align: middle;
 				padding-top: 20px;
-				padding-bottom: 20px
+				padding-bottom: 20px;
+				min-height: 215px;
 			}
 			body{
 				background-color: #f2f2f2;
@@ -117,13 +115,14 @@
 					$num = $result->num_rows;
 					echo "Number of results: $num<br><br>";
 					while($row = $result->fetch_assoc()){
-						echo "<div class='col-sm-2 col-centered' id ='name_row'>";
+						echo "<div class='col-sm-2 col-centered' id='name_row'>";
+						echo "<div class='result'>";
 						//Name
-						echo "<b>Name: ".$row['fname']." ".$row['lname']."</b>";
+						echo "<b> ".$row['fname']." ".$row['lname']."</b>";
 						//Occupation
 						$title = $row['cur_title'];
 						$company = $row['cur_company'];
-						if($title or $company){
+						if($title || $company){
 							echo "<br>Occupation: ";
 							if($title){
 								echo $title;
@@ -144,7 +143,7 @@
 							$state = $state_row['state'];
 							$output->free();
 						}
-						if($city or $state){
+						if($city || $state){
 							echo "<br>Location: ";
 							if($city){
 								echo $city;
@@ -157,14 +156,13 @@
 							}
 						}
 						?>
+						</div>
 						<!--View Profile-->
-						<div id="button">
-							<form action="<?=$_SERVER['PHP_SELF']?>" method="POST">
-								<input name="view_id" type="hidden" value="<?=$row['user_id'];?>">
-								<input name="view" type="submit" class="w3-btn w3-hover-green" value="View Profile">
-							</form>
-						</div></div>
-						<?php
+						<div class="button">
+							<a href="ViewProfile.php?user_id=<?=$row['user_id']?>" class="w3-btn w3-hover-blue">View Profile</a>
+						</div>
+					</div>
+				<?php
 					}
 					$result->free();
 				}else{
@@ -175,5 +173,18 @@
 			}
 			$link->close();
 		?>
+		<script>
+
+			$(".result").each(function() {
+				var $this = $(this);
+				var $margin = $this.parent().height()
+				console.log($margin);
+				$margin -= $this.height();
+				console.log($margin);
+				$this.css('margin-bottom', $margin);
+				console.log($margin);
+			});
+
+		</script>
 	</body>
 </html>

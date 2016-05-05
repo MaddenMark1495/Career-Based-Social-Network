@@ -9,11 +9,6 @@
 		//header("Location: index.php");
 	}
 
-	if(isset($_POST['view'])) {
-		$id = $_POST['view_id'];
-		header("Location: ViewProfile.php?user_id=$id");
-	}
-
 	$uid = $_SESSION['user_id'];
 
 	$message = '';
@@ -22,77 +17,65 @@
 	if(isset($_POST['remove'])) {
 		$id = $_POST['view_id'];
 		$sql = "DELETE FROM links WHERE (user_id=$uid AND linked_user_id=$id) OR (user_id=$id AND linked_user_id=$uid)";
-		$link->query($sql);
+		if($link->query($sql)) {
+			$message = "Connection Removed";
+		}
 	}
 ?>
 <!DOCTYPE html>
 <html>
-
     <head>
-
-        <title>Connections </title>
-<meta charset="utf-8">
+		<title>Connections </title>
+		<meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="page1.css">
         <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open Sans">
-       <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
-<style>
+		<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
 
-
-
-    <style>
-        .row{
-        	margin-bottom: 30px;
-        }
-
-       #name_row{
-		   border: 1px solid grey;
-		   background-color:#FFFFFF;
-           margin-bottom: 15px;
-           margin-top: 15px;
-	   }
-	   #profile_pic{
-		   border: 1px solid grey;
-		   background-color:#FFFFFF;
-	   }
-
-	   body{
-		   background-color:#f2f2f2;
-	   }
-	   h4, h5, p{
-		   padding-left: 10px;
-	   }
-        #button{
-            float:right;
-            display:inline;
-        }
-
-    .dropdown{
-        display:inline;
-    }
-    #search_row{
-            margin-bottom: 15px;
-           margin-top: 15px;
-    }
-    #search_bar{
-        float:right;
-        display:inline;
-
-    }
-	nav div.container-fluid {
-		padding-left: 100px;
-		padding-right: 100px;
-	}
-
-    </style>
-
-
+	    <style>
+	        .row{
+	        	margin-bottom: 30px;
+	        }
+			.name_row{
+				border: 1px solid grey;
+				background-color:#FFFFFF;
+				margin-bottom: 15px;
+				margin-top: 15px;
+				height: 100px;
+			}
+			#profile_pic{
+				border: 1px solid grey;
+				background-color:#FFFFFF;
+			}
+			body{
+				background-color:#f2f2f2;
+			}
+			h4, h5, h6, p{
+				padding-left: 10px;
+			}
+			#button{
+	            float:right;
+	            display:inline;
+	        }
+		    .dropdown{
+		        display:inline;
+		    }
+		    #search_row{
+		            margin-bottom: 15px;
+		           margin-top: 15px;
+		    }
+		    #search_bar{
+		        float:right;
+		        display:inline;
+		    }
+			nav div.container-fluid {
+				padding-left: 100px;
+				padding-right: 100px;
+			}
+	    </style>
     </head>
-
-
     <body>
 		<div class="row" id="row0">
             <div class="col-sm-12">
@@ -127,9 +110,7 @@
 										<li><a href="connections.php">Connections</a></li>
 										<li><a href="logout.php">Logout</a></li>
 										<li role="separator" class="divider"></li>
-										<!--<li class="dropdown-header">Nav header</li>-->
 										<li><a href="Top10.php">Top 10 Users</a></li>
-										<!-- <li><a href="#">One more separated link</a></li> -->
 									</ul>
 								</li>
 							</ul>
@@ -143,50 +124,49 @@
 		<br>
 		<br>
 
-	    <div class="row" id="row1">
+		<div class="row" id="row0">
 			<div class="col-sm-4"></div>
-			<div class="col-sm-4" id ="space_row"></div>
-		 	<div class="col-sm-4"></div>
+			<div class="col-sm-4">
+	<?php
+		if($message) {
+	?>
+				<div class="alert alert-info">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+					<strong>Info!</strong> <?=$message?>
+				</div>
+	<?php
+		}
+	?>
+			</div>
+			<div class="col-sm-4"></div>
 		</div>
 
-	    <div class="row" id="row2">
+	    <div class="row" id="row1">
 			<div class="col-sm-4"></div>
 			<div class="col-sm-4" id ="button_toolbar">
 	            <h1 style="text-align: center">Connections</h1>
 	        </div>
 		 	<div class="col-sm-4"></div>
 		</div>
-
-		<div class="row" id = "search_row">
-			<div class="col-sm-1"></div>
-			<div class="col-sm-1"></div>
-			<div class="col-sm-8"></div>
-			<div class="col-sm-1"></div>
-			<div class="col-sm-1"></div>
-		</div>
 <?php
-	$sql = "select * from users ";
-	$sql .=	"inner join (select linked_user_id, linked_date from links where user_id=$uid union ";
-	$sql .= "select user_id, linked_date from links where linked_user_id=$uid) as user_links ";
-	$sql .= "where users.user_id=user_links.linked_user_id";
+	$sql = "SELECT * FROM users ";
+	$sql .=	"INNER JOIN (SELECT linked_user_id, linked_date FROM links WHERE user_id=$uid UNION ";
+	$sql .= "SELECT user_id, linked_date FROM links WHERE linked_user_id=$uid) AS user_links ";
+	$sql .= "WHERE users.user_id=user_links.linked_user_id ";
+	$sql .= "ORDER BY lname ASC";
 
 	$result = $link->query($sql);
-	$i = 3;
+	$i = 2;
 	while($row = $result->fetch_assoc()) {
-		//print_r($row);
 ?>
 		<div class="row" id="row<?=$i?>">
 			<div class="col-sm-1"></div>
 			<div class="col-sm-1"></div>
-			<div class="col-sm-8" id ="name_row">
+			<div class="col-sm-8 name_row">
 				<h4 id="name"><?php echo $row['fname'] . " " . $row['lname']; ?></h4>
 				<div id="button">
 					<form action=<?=$_SERVER['PHP_SELF']?> method="POST">
-						<input name="view_id" type="hidden" value="<?=$row['user_id'];?>">
-						<input name="view" type="submit" class="w3-btn w3-hover-green" value="View Profile">
-					</form>
-
-					<form action=<?=$_SERVER['PHP_SELF']?> method="POST">
+						<a href="ViewProfile.php?user_id=<?=$row['user_id']?>" class="w3-btn w3-hover-blue">View Profile</a>
 						<input name="view_id" type="hidden" value="<?=$row['user_id'];?>">
 						<input name="remove" type="submit" class="w3-btn w3-hover-green" value="Unconnect">
 					</form>
@@ -241,6 +221,7 @@
 		$i++;
 	}
 	$result->free();
+	$link->close();
 ?>
 	</body>
 </html>

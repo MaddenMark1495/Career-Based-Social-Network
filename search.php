@@ -31,12 +31,15 @@
 				color: black;
 				background-color: #33ff77
 			}
-	       #name_row{
-			   border: 1px solid grey;
-			   background-color:#FFFFFF;
-	           margin-bottom: 15px;
-	           margin-top: 15px
-		   }
+			#name_row{
+				border: 1px solid grey;
+				background-color:#FFFFFF;
+				margin-bottom: 15px;
+				margin-top: 15px
+			}
+			#button{
+				padding-top: 20px
+			}
 			#background{
 				border: 1px solid grey;
 				background-color: #FFFFFF
@@ -81,7 +84,7 @@
 						<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 							<form action="search.php" class="navbar-form navbar-left" role="search" method="post">
 								<div class="form-group">
-									<input name="search" type="text" class="form-control" placeholder="" required>
+									<input name="search" type="text" class="form-control" placeholder="" value='<?=$_POST['search']?>' required>
 								</div>
 								<button type="submit" class="btn btn-default">Search</button>
 							</form>

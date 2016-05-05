@@ -8,12 +8,7 @@
 		$_SESSION['user_id'] = 1;
 		//header("Location: index.php");
 	}
-/*
-	if(isset($_POST['view'])) {
-		$id = $_POST['view_id'];
-		header("Location: ViewProfile.php?user_id=$id");
-	}
-*/
+
 	$uid = $_SESSION['user_id'];
 
 	$message = '';
@@ -22,7 +17,9 @@
 	if(isset($_POST['remove'])) {
 		$id = $_POST['view_id'];
 		$sql = "DELETE FROM links WHERE (user_id=$uid AND linked_user_id=$id) OR (user_id=$id AND linked_user_id=$uid)";
-		$link->query($sql);
+		if($link->query($sql)) {
+			$message = "Connection Removed";
+		}
 	}
 ?>
 <!DOCTYPE html>
@@ -34,7 +31,6 @@
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="page1.css">
         <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open Sans">
 		<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
 
@@ -114,9 +110,7 @@
 										<li><a href="connections.php">Connections</a></li>
 										<li><a href="logout.php">Logout</a></li>
 										<li role="separator" class="divider"></li>
-										<!--<li class="dropdown-header">Nav header</li>-->
 										<li><a href="Top10.php">Top 10 Users</a></li>
-										<!-- <li><a href="#">One more separated link</a></li> -->
 									</ul>
 								</li>
 							</ul>
@@ -129,6 +123,23 @@
 		<br>
 		<br>
 		<br>
+
+		<div class="row" id="row0">
+			<div class="col-sm-4"></div>
+			<div class="col-sm-4">
+	<?php
+		if($message) {
+	?>
+				<div class="alert alert-info">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+					<strong>Info!</strong> <?=$message?>
+				</div>
+	<?php
+		}
+	?>
+			</div>
+			<div class="col-sm-4"></div>
+		</div>
 
 	    <div class="row" id="row1">
 			<div class="col-sm-4"></div>
@@ -147,7 +158,6 @@
 	$result = $link->query($sql);
 	$i = 2;
 	while($row = $result->fetch_assoc()) {
-		//print_r($row);
 ?>
 		<div class="row" id="row<?=$i?>">
 			<div class="col-sm-1"></div>
@@ -211,6 +221,7 @@
 		$i++;
 	}
 	$result->free();
+	$link->close();
 ?>
 	</body>
 </html>

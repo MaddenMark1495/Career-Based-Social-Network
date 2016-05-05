@@ -220,20 +220,33 @@
 			$message = "prepare fail";
 		}
 	}
+	if(isset($_POST['deleteprofile'])) {
+		$id = $_POST['user'];
+		$sql = "DELETE FROM users WHERE user_id=$id";
+		if($link->query($sql)) {
+			header("Location: logout.php");
+		}
+	}
  ?>
 <!DOCTYPE html>
 <html>
 <head>
-<title>Profile</title>
-<meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open Sans">
-		<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+	<title>Profile</title>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open Sans">
+	<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
 
     <style>
+		select {
+			width: 225px;
+		}
+		#row3, #row2{
+			text-align: center;
+		}
         .row{
 			margin-bottom: 30px
         }
@@ -275,7 +288,6 @@
 		<div class="col-sm-12">
 			<nav class="navbar navbar-inverse navbar-fixed-top">
 				<div class="container-fluid">
-					<div class="col-sm-1"></div>
 					<!-- Brand and toggle get grouped for better mobile display -->
 					<div class="navbar-header">
 						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -303,14 +315,11 @@
  									<li><a href="connections.php">Connections</a></li>
  					                <li><a href="logout.php">Logout</a></li>
  					                <li role="separator" class="divider"></li>
- 					                <!--<li class="dropdown-header">Nav header</li>-->
  					                <li><a href="Top10.php">Top 10 Users</a></li>
- 					                <!-- <li><a href="#">One more separated link</a></li> -->
  								</ul>
  							</li>
  						</ul>
  					</div><!-- /.navbar-collapse -->
-					<div class="col-sm-1"></div>
  				</div><!-- /.container-fluid -->
  			</nav>
  		</div>
@@ -375,31 +384,33 @@
 ?>
 					</select>
 				</h4>
-				<p> <input class=" w3-btn w3-hover-blue" type="submit" name="submit1" value="Save"></p>
+				<input type="hidden" name="user" value="<?=$uid?>">
+				<input class=" w3-btn w3-hover-blue" type="submit" name="submit1" value="Save Changes">
+				<input type="submit" name="deleteprofile" class="w3-btn w3-hover-red" value="Delete Profile">
 			</form>
+			<br>
 		</div>
-        <div class="col-sm-4"></div>
+		<div class="col-sm-4"></div>
 	</div>
     <div class="row" id="row3">
         <div class="col-sm-1"></div>
         <div class="col-sm-1"></div>
         <div class="col-sm-8">
             <div id = "background">
-				<h2>Background</h2>
+				<h1><b>Background</b></h1>
 				<h4>Summary</h4>
 <!-- Form for Summary -->
 				<form action="<?=$_SERVER['PHP_SELF']?>" method="POST">
 					<p><textarea name="summary" placeholder="Summary"><?php echo $user_row['summary']; ?></textarea></p>
-					<p><input class=" w3-btn w3-hover-blue" type="submit" name="submit2" value="Save"></p>
+					<p><input class=" w3-btn w3-hover-blue" type="submit" name="submit2" value="Save Changes"></p>
 				</form>
 				<hr>
-				<h3>Experience</h3>
+				<h1><b>Experience</b></h1>
 <?php
 	$sql = "SELECT * FROM work_experience WHERE user_id=$uid";
 	$result = $link->query($sql);
 	$i=0;
 	while($row = $result->fetch_assoc()) {
-		//print_r($row);
 		$i++;
 ?>
 				<form action="<?=$_SERVER['PHP_SELF']?>" method="POST">
@@ -415,11 +426,10 @@
 					</h5>
 					<p><textarea name="description" placeholder="Description"><?php echo $row['description']; ?></textarea></p>
 					<input type="hidden" name="row_id" value="<?=$i?>">
-					<p><input class="w3-btn w3-hover-blue" type="submit" name="submit3" value="Save Changes"></p>
-				</form>
-				<form role="form" class="form-inline" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
-					<input type="hidden" name="row_id" value="<?=$i?>">
-					<p><input class="w3-btn w3-hover-blue" type="submit" name="delete_work" value="Delete Entry"></p>
+					<div class="button">
+					<input class="w3-btn w3-hover-blue" type="submit" name="submit3" value="Save Changes">
+					<input class="w3-btn w3-hover-red" type="submit" name="delete_work" value="Delete Entry">
+					</div>
 				</form>
 				<hr>
 <?php
@@ -444,7 +454,7 @@
 				</form>
 				<br>
 				<hr>
-				<h3>Education</h3>
+				<h1><b>Education</b></h1>
 <?php
 	$sql = "SELECT * FROM education INNER JOIN major on education.major_idx=major.major_idx INNER JOIN degree_type on education.deg_type_idx = degree_type.deg_type_idx WHERE education.user_id=$uid";
 	$result = $link->query($sql);
@@ -474,7 +484,7 @@
 		}
 		$maj_result->free();
 ?>
-						</select>  OR Enter New: <input name="new_major" type="text" placeholder="Major">
+						</select> OR Enter New: <input name="new_major" type="text" placeholder="Major">
 					</h5>
 					<h5>Degree Type <br>
 						<select form="school<?=$i?>" name="degree_type">
@@ -493,11 +503,8 @@
 						</select>  OR Enter New: <input name="new_degree" type="text" placeholder="Degree">
 					</h5>
 					<input type="hidden" name="row_id" value="<?=$i?>">
-					<p><input class="w3-btn w3-hover-blue" type="submit" name="submit4" value="Save Changes"></p>
-				</form>
-				<form action="<?=$_SERVER['PHP_SELF']?>" method="POST">
-					<input type="hidden" name="row_id" value="<?=$i?>">
-					<p><input class="w3-btn w3-hover-blue" type="submit" name="delete_ed" value="Delete Entry"></p>
+					<input class="w3-btn w3-hover-blue" type="submit" name="submit4" value="Save Changes">
+					<input class="w3-btn w3-hover-red" type="submit" name="delete_ed" value="Delete Entry">
 				</form>
 				<hr>
 <?php
@@ -540,24 +547,13 @@
 					<input type="hidden" name="row_id" value="<?=$i?>">
 					<p><input class="w3-btn w3-hover-blue" type="submit" name="submit4new" value="Save New"></p>
 				</form>
-                <hr>
-				<h4>Skills</h4>
-					<ul id="skills_list">
-<?php
-	$sql = "SELECT * from user_skills inner join skills on user_skills.skills_id=skills.skills_id where user_skills.user_id=$uid ";
+                <br>
 
-	$ss = $link->query($sql);
-	$i=0;
-	while($srow = $ss->fetch_assoc()){
-	$i++;
-	}
-	$ss->free();
-?>
-					</ul>
-		</div>
-	</div>
 <?php
 	$link->close();
 ?>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

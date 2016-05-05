@@ -6,10 +6,7 @@
 		$_SESSION['islogin'] = 1;
 		//header("Location: index.php");
 	}
-	if(isset($_POST['view'])){
-		$id = $_POST['view_id'];
-		header("Location: ViewProfile.php?user_id=$id");
-	}
+
 	$uid = $_SESSION['user_id'];
 	require "../secure/db.conf";
 	if(!$link = new mysqli($dbhost, $dbuser, $dbpass, $dbname)){
@@ -55,7 +52,6 @@
 			<div class="col-sm-12">
 				<nav class="navbar navbar-inverse navbar-fixed-top">
 					<div class="container-fluid">
-						<div class="col-sm-1"></div>
 						<div class="navbar-header">
 							<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
 								<span class="sr-only">Toggle navigation</span>
@@ -86,7 +82,6 @@
 								</li>
 							</ul>
 						</div>
-						<div class="col-sm-1"></div>
 					</div>
 				</nav>
 			</div>
@@ -142,10 +137,7 @@
 							?>
 							<!--View Profile-->
 							<div id="button">
-								<form action="<?=$_SERVER['PHP_SELF']?>" method="POST">
-									<input name="view_id" type="hidden" value="<?=$row['user_id'];?>">
-									<input name="view" type="submit" class="w3-btn w3-hover-green" value="View Profile">
-								</form>
+								<a href="ViewProfile.php?user_id=<?=$row['user_id']?>" class="w3-btn w3-hover-blue">View Profile</a>
 							</div>
 							<br><br>
 							<?php

@@ -25,9 +25,9 @@
 			$state = $_POST['state'];
 			$stmt->bind_param("sssssii", $fname, $lname, $title, $comp, $city, $state, $uid);
 			if($stmt->execute()) {
-				$message = "<h4>Success</h4>";
+				$message = "Success: Information Updated";
 			} else {
-				$message = "<h4>Failed</h4>";
+				$message = "Failed: Information Not Updated";
 			}
 			$stmt->close();
 		} else {
@@ -41,9 +41,9 @@
 			$summary = $_POST['summary'];
 			$stmt->bind_param("si", $summary, $uid);
 			if($stmt->execute()) {
-				$message ="<h4>Success</h4>";
+				$message = "Success: Summary Update";
 			} else {
-				$message ="<h4>Failed</h4>";
+				$message = "Failed: Summary Not Updated";
 			}
 			$stmt->close();
 		}
@@ -54,9 +54,9 @@
 			$rowid = $_POST['row_id'];
 			$stmt->bind_param("ii", $uid, $rowid);
 			if($stmt->execute()) {
-				$message = "<h4>Successfully Deleted</h4>";
+				$message = "Success: Experience Deleted";
 			} else {
-				$message = "<h4>Failed to Delete</h4>";
+				$message = "Failed: Experience Not Deleted";
 			}
 		}
 	}
@@ -66,15 +66,15 @@
 		if ($stmt = $link->prepare($sql)) {
 			$title = $_POST['title'];
 			$company = $_POST['company'];
-			$start = $_POST['start_date'];
-			$end = $_POST['end_date'];
+			$start = $_POST['start_date'] ? $_POST['start_date'] : NULL;
+			$end = $_POST['end_date'] ? $_POST['start_date'] : NULL;
 			$description = $_POST['description'];
 			$entry = $_POST['row_id'];
 			$stmt->bind_param("sssssii", $title, $company, $start, $end, $description, $uid, $entry);
 			if($stmt->execute()) {
-				$message = "<h4>Success</h4>";
+				$message = "Success: Experience Updated";
 			} else {
-				$message = "<h4>Failed</h4>";
+				$message = "Failed: Experience Not Updated";
 			}
 			$stmt->close();
 		} else {
@@ -87,14 +87,15 @@
 			$entry = $_POST['row_id'];
 			$company = $_POST['company'];
 			$title = $_POST['title'];
-			$start = $_POST['start_date'];
-			$end = $_POST['end_date'];
+			$start = $_POST['start_date'] ? $_POST['start_date'] : NULL;
+			$end = $_POST['end_date'] ? $_POST['start_date'] : NULL;
 			$description = $_POST['description'];
 			$stmt->bind_param("iisssss", $uid, $entry, $company, $title, $start, $end, $description);
 			if($stmt->execute()) {
-				$message = "<h4>Success</h4>";
+				$message = "Success: Experience Added";
 			} else {
-				$message = "<h4>Failed</h4>";
+				$message = "Failed: Experience Not Added";
+				$message = $title . " " . $start . " " . $end;
 			}
 			$stmt->close();
 		} else {
@@ -107,9 +108,9 @@
 			$entry = $_POST['row_id'];
 			$stmt->bind_param("ii", $uid, $entry);
 			if($stmt->execute()) {
-				$message = "<h4>Successfully Deleted</h4>";
+				$message = "Success: Education Deleted";
 			} else {
-				$message = "<h4>Failed to Delete</h4>";
+				$message = "Failed: Education Not Deleted";
 			}
 		} else {
 			$message = "prepare fail";
@@ -146,13 +147,13 @@
 		if($stmt = $link->prepare($sql)) {
 			$entry = $_POST['row_id'];
 			$school = $_POST['school'];
-			$start = $_POST['start_year'];
-			$end = $_POST['end_year'];
+			$start = $_POST['start_year'] ? $_POST['start_year'] : NULL;
+			$end = $_POST['end_year'] ? $_POST['end_year'] : NULL;
 			$stmt->bind_param("siissii", $school, $degree, $major, $start, $end, $uid, $entry);
 			if($stmt->execute()) {
-				$message = "<h4>Success</h4>";
+				$message = "Success: Education Updated";
 			} else {
-				$message = "<h4>Failed</h4>";
+				$message = "Failed: Education Not Updated";
 			}
 		} else {
 			$message = "prepare fail";
@@ -189,13 +190,13 @@
 		if($stmt = $link->prepare($sql)) {
 			$entry = $_POST['row_id'];
 			$school = $_POST['school'];
-			$start = $_POST['start_year'];
-			$end = $_POST['end_year'];
+			$start = $_POST['start_year'] ? $_POST['start_year'] : NULL;
+			$end = $_POST['end_year'] ? $_POST['end_year'] : NULL;
 			$stmt->bind_param("iisiiss", $uid, $entry, $school, $degree, $major, $start, $end);
 			if($stmt->execute()) {
-				$message = "<h4>Success</h4>".$_POST['degree_type']. " ".$_POST['major_name'];
+				$message = "Success: Education Added";
 			} else {
-				$message = "<h4>Failed</h4>";
+				$message = "Failed: Education Not Added";
 			}
 			$stmt->close();
 		} else {
@@ -210,9 +211,9 @@
 			$skill=$_POST['skill'.$i];
 			$stmt->bind_param("sss", $skill, $uid,$i);
 			if($stmt->execute()) {
-				$message = "<h4>Success</h4>";
+				$message = "Success: hmmm";
 			} else {
-				$message = "<h4>Failed</h4>";
+				$message = "Failed: hmmm";
 			}
 			$stmt->close();
 		} else {
@@ -234,47 +235,41 @@
 
     <style>
         .row{
-        margin-bottom: 30px
+			margin-bottom: 30px
         }
-
-
         #profile_info{
         border: 1px solid grey ;
         background-color:#FFFFFF;
         }
-
-       #background{
-
-        border: 1px solid grey;
-         background-color:#FFFFFF;
-
+		#background{
+			border: 1px solid grey;
+			background-color:#FFFFFF;
         }
         #profile_pic{
             border: 1px solid grey;
             background-color:#FFFFFF;
         }
         .nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
-    color:black;
-    background-color:#33ff77;
-    }
-
-        body{
+			color:black;
+			background-color:#33ff77;
+		}
+        body {
             background-color:#f2f2f2;
-
         }
         h4, h5, p{
             padding-left: 10px;
         }
 		nav div.container-fluid {
- 		   padding-left: 100px;
- 		   padding-right: 100px;
- 	   }
-
+			padding-left: 100px;
+			padding-right: 100px;
+		}
+		textarea {
+			width: 50%;
+			height: 150px;
+			resize: none;
+		}
     </style>
-
-
 </head>
-
 <body>
 	<div class="row" id="row0">
 		<div class="col-sm-12">
@@ -327,7 +322,18 @@
 
 	<div class="row" id="row1">
 		<div class="col-sm-4"></div>
-		<div class="col-sm-4" style='text-align: center'><?php echo $message; ?></div>
+		<div class="col-sm-4">
+<?php
+	if($message) {
+?>
+			<div class="alert alert-info">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Info!</strong> <?=$message?>
+			</div>
+<?php
+	}
+?>
+		</div>
 		<div class="col-sm-4"></div>
 	</div>
 
@@ -336,7 +342,6 @@
 		<div class="col-sm-4" id="profile_info">
 <?php
 	$sql = "SELECT * FROM users where user_id=$uid";
-
 	$result = $link->query($sql);
 	$user_row = $result->fetch_assoc();
 ?>
@@ -392,7 +397,6 @@
 <?php
 	$sql = "SELECT * FROM work_experience WHERE user_id=$uid";
 	$result = $link->query($sql);
-
 	$i=0;
 	while($row = $result->fetch_assoc()) {
 		//print_r($row);
@@ -423,12 +427,12 @@
 	$result->free();
 	$i++;
 ?>
-				<form  action="<?=$_SERVER['PHP_SELF']?>" method="POST">
+				<form action="<?=$_SERVER['PHP_SELF']?>" method="POST">
 					<h5>Job Title <br>
 						<input name="title" type="text" placeholder="Job Title">
 					</h5>
 					<h5>Company <br>
-						<input name="company" type="text" placeholder="Job Title">
+						<input name="company" type="text" placeholder="Company">
 					</h5>
 					<h5>Start - End  (YYYY-MM-DD)<br>
 						<input name="start_date" type="text" placeholder="Start date">-
@@ -459,31 +463,32 @@
 					<h5>Major <br>
 						<select form="school<?=$i?>" name="major_name">
 <?php
-	$sql = "SELECT * FROM major";
-	$maj_result = $link->query($sql);
-	while($maj_row = $maj_result->fetch_assoc()) {
-		if($maj_row['major_idx'] == $row['major_idx']) {
-			echo "<option value='" . $maj_row['major_idx'] . "' selected>" . $maj_row['major_name'] . "</option>";
-		} else {
-			echo "<option value='" . $maj_row['major_idx'] . "'>" . $maj_row['major_name'] . "</option>";
+		$sql = "SELECT * FROM major";
+		$maj_result = $link->query($sql);
+		while($maj_row = $maj_result->fetch_assoc()) {
+			if($maj_row['major_idx'] == $row['major_idx']) {
+				echo "<option value='" . $maj_row['major_idx'] . "' selected>" . $maj_row['major_name'] . "</option>";
+			} else {
+				echo "<option value='" . $maj_row['major_idx'] . "'>" . $maj_row['major_name'] . "</option>";
+			}
 		}
-	}
-	$maj_result->free();
+		$maj_result->free();
 ?>
 						</select>  OR Enter New: <input name="new_major" type="text" placeholder="Major">
 					</h5>
 					<h5>Degree Type <br>
 						<select form="school<?=$i?>" name="degree_type">
 <?php
-	$sql = "SELECT * FROM degree_type";
-	$deg_result = $link->query($sql);
-	while($deg_row = $deg_result->fetch_assoc()) {
-		if($deg_row['deg_type_idx'] == $row['deg_type_idx']) {
-			echo "<option value='" . $deg_row['deg_type_idx'] . "' selected>" . $deg_row['degree_type_name'] . "</option>";
-		} else {
-			echo "<option value='" . $deg_row['deg_type_idx'] . "'>" . $deg_row['degree_type_name'] . "</option>";
+		$sql = "SELECT * FROM degree_type";
+		$deg_result = $link->query($sql);
+		while($deg_row = $deg_result->fetch_assoc()) {
+			if($deg_row['deg_type_idx'] == $row['deg_type_idx']) {
+				echo "<option value='" . $deg_row['deg_type_idx'] . "' selected>" . $deg_row['degree_type_name'] . "</option>";
+			} else {
+				echo "<option value='" . $deg_row['deg_type_idx'] . "'>" . $deg_row['degree_type_name'] . "</option>";
+			}
 		}
-	}
+		$deg_result->free();
 ?>
 						</select>  OR Enter New: <input name="new_degree" type="text" placeholder="Degree">
 					</h5>
@@ -528,6 +533,7 @@
 	while($deg_row = $deg_result->fetch_assoc()) {
 		echo "<option value='" . $deg_row['deg_type_idx'] . "'>" . $deg_row['degree_type_name'] . "</option>";
 	}
+	$deg_result->free();
 ?>
 						</select>  OR Enter New: <input name="new_degree" type="text" placeholder="Degree">
 					</h5>
@@ -536,7 +542,7 @@
 				</form>
                 <hr>
 				<h4>Skills</h4>
-
+					<ul id="skills_list">
 <?php
 	$sql = "SELECT * from user_skills inner join skills on user_skills.skills_id=skills.skills_id where user_skills.user_id=$uid ";
 
@@ -544,21 +550,10 @@
 	$i=0;
 	while($srow = $ss->fetch_assoc()){
 	$i++;
+	}
+	$ss->free();
 ?>
-				<ul id="skils_list">
-
-
-					<li>Skill</li>
-					<input name = "skill<?=$i?>"placeholder="Skill" value="<?php echo $srow['skill']; ?>">
-					<input type="hidden" name="skill_id" value="<?=$i?>">
-<?php
-		}
-?>
-				<p> <input class="w3-btn w3-hover-blue" type="submit" name="submit4" value="Save"></p>
-			</div>
-			<div align="center">
-				<div align="center"></div>
-			</div>
+					</ul>
 		</div>
 	</div>
 <?php

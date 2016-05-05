@@ -118,12 +118,14 @@
 		<br>
 
 		<div class="header"><h2>Top 10 Users by Profile Views</h2></div>
-		<div class="top10"></div>
+		<div class="col-sm-12">
+			<div class="top10"></div>
+		</div>
 		<hr>
 
 		<script>
 
-		 	var url = "http://swegroup14.centralus.cloudapp.azure.com/Career-Based-Social-Network/top10server.php";
+		 	var url = "http://sylis.centralus.cloudapp.azure.com/Career-Based-Social-Network/top10server.php";
 
 			//ajax request to get the top 10 list from DB as JSON
 			$.getJSON(url, function(data) {

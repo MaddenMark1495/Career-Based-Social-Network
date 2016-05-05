@@ -145,14 +145,23 @@
 
 	<div class="row" id="row1">
 		<div class="col-sm-4"></div>
-		<div class="col-sm-4" id ="button_toolbar"></div>
-	 	<div class="col-sm-4"></div>
+		<div class="col-sm-4">
+<?php
+	if($message) {
+?>
+			<div class="alert alert-info">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Info!</strong> <?=$message?>
+			</div>
+<?php
+	}
+?>
+		</div>
+		<div class="col-sm-4"></div>
 	</div>
 
     <div class="row" id = "row2">
-
         <div class="col-sm-4"></div>
-
         <div class="col-sm-4" id="profile_info">
 <?php
 	$sql = "SELECT * FROM users INNER JOIN states on users.state=states.idstates WHERE user_id=$view_id";
@@ -201,7 +210,6 @@
 	}
 ?>
 			</form>
-			<p><?=$message?></p>
 		</div>
 
     </div>

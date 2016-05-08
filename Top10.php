@@ -3,10 +3,7 @@
 	require "../secure/db.conf";
 
 	if(!$_SESSION['islogin']) {
-		$_SESSION['username'] = 'user';
-		$_SESSION['islogin'] = 1;
-		$_SESSION['user_id'] = 1;
-		//header("Location: index.php");
+		header("Location: index.php");
 	}
 
 	$uid = $_SESSION['user_id'];
@@ -110,7 +107,7 @@
 	 			</nav>
 	 		</div>
 	 	</div>
-		
+
 		<br>
 		<br>
 		<br>

@@ -3,19 +3,12 @@
 
 	//redirect if not logged in
 	if(!$_SESSION['islogin']) {
-		$_SESSION['username'] = 'user';
-		$_SESSION['islogin'] = 1;
-		$_SESSION['user_id'] = 1;
-		//header("Location: index.php");
+		header("Location: index.php");
 	}
 
 	$uid = $_SESSION['user_id'];
 	//user get variable to determine which profile to load
-	if(isset($_GET['user_id'])) {
-		$view_id = $_GET['user_id'];
-	} else {
-		$view_id = 1;
-	}
+	$view_id = $_GET['user_id'];
 
 	require '../secure/db.conf';
     // Create connection
@@ -268,25 +261,7 @@
 	$result->free();
 ?>
 				</ul>
-				<hr>
-				<h4>Skills</h4>
-				<ul id="skills_list">
-<?php
-	$sql = "SELECT skills.skill from user_skills inner join skills on user_skills.skills_id=skills.skills_id where user_skills.user_id=$view_id";
-	$result = $conn->query($sql);
-	$n = $result->num_rows;
-	$count = 0;
-	while($row = $result->fetch_assoc()) {
-		++$count;
-		echo $row['skill'];
-		if($count < $n) {
-			echo ", ";
-		}
-	}
-	$result->free();
-	$conn->close();
-?>
-				</ul>
+				
 			</div>
 			<div class="col-sm-1"></div>
 			<div class="col-sm-1"></div>
